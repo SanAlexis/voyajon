@@ -1,0 +1,80 @@
+
+
+<div class="modal-header">
+    <button type="button" class="btn btn-link pull-right"  ng-click="closemodal()" >
+        <i class="fa fa-remove"></i>  
+    </button>
+    <h3 class="modal-title"> {{categorie}}</h3>
+    <small class="text-muted"  translate="form.legend">Fields marked with * are required</small>
+</div>
+<div class="modal-body" >
+    <form      ng-submit="save()"  novalidate="true"
+               name="form"   method="POST"    id="form"    class="bs-example form-validation form-horizontal" >
+        <div class="form-group"  >
+            <label    class="col-lg-offset-1 col-lg-2 control-label">Nom
+                <span style="color:red">*</span>
+            </label> 
+            <div class="col-lg-6"><input type="text" class="form-control"  required=""  ng-model="tsoftitem.libelle"></div>
+
+        </div>
+
+        <div class="form-group"  >
+            <label    class="col-lg-offset-1 col-lg-2 control-label">Adresse
+            </label> 
+            <div class="col-lg-6"><input type="text" class="form-control"   ng-model="tsoftitem.adresse"></div>
+
+        </div>
+
+        <div class="form-group"  >
+            <label    class="col-lg-offset-1 col-lg-2 control-label">Ville<span style="color:red">*</span>
+            </label> 
+            <div class="col-lg-6">
+                <select   ng-model="tsoftitem.ville" required=""  class="form-control"
+                          ng-options="v as v.libelle  for v in villes"   >
+                    <option>--</option>
+                </select>
+            </div>
+
+        </div>
+
+        <div class="form-group"  >
+            <label    class="col-lg-offset-1 col-lg-2 control-label">Boite Postale
+            </label> 
+            <div class="col-lg-6"><input type="text" class="form-control"   ng-model="tsoftitem.boite_postale"></div>
+
+        </div>
+
+        <div class="form-group"  >
+            <label    class="col-lg-offset-1 col-lg-2 control-label">Telephone 1<span style="color:red">*</span>
+            </label> 
+            <div class="col-lg-6"><input type="number" class="form-control"  required=""  ng-model="tsoftitem.telephone1"></div>
+
+        </div>
+
+        <div class="form-group"  >
+            <label    class="col-lg-offset-1 col-lg-2 control-label">Telephone 2
+            </label> 
+            <div class="col-lg-6"> <input type="number" class="form-control"   ng-model="tsoftitem.telephone2"></div>
+
+        </div>
+        <div class="form-group">
+            <div class="col-lg-offset-3 col-lg-10">
+                <button    type="button" class="btn btn-default"  ng-click="closemodal()"  >{{'form.reset'| translate}}</button>
+                <button type="submit" class="btn btn-primary"    ng-disabled="form.$invalid || form.$pristine"    >
+                    <i class="fa fa-save"  ng-show="!errorService.waiting">{{'form.save'| translate}}</i>
+                    <i class="fa fa-spinner faa-spin animated" ng-show="errorService.waiting"></i>
+                    <span ng-show="errorService.waiting">Loading...</span>
+                </button> 
+            </div>
+
+        </div> 
+    </form>
+
+</div> 
+
+
+
+
+
+
+

@@ -1,0 +1,125 @@
+
+<div class="modal-header">
+    <button type="button" class="btn btn-link pull-right"  ng-click="closemodal()" >
+        <i class="fa fa-remove"></i>  
+    </button>
+    <h3 class="modal-title"> {{categorie}}</h3>
+    <small class="text-muted"  translate="form.legend">Fields marked with * are required</small>
+</div>
+<div class="modal-body" >
+    <div>
+       <pre>
+            {{tsoftitem}}
+        </pre>
+        <pre>{{trajets}}</pre>
+        <pre>{{agences}}</pre>
+    </div>
+    <form      ng-submit="save()"  novalidate="true"
+               name="form"   method="POST"    id="form"    class="bs-example form-validation form-horizontal" >
+
+
+        <div class="form-group"  >
+            <label    class="col-lg-offset-1 col-lg-2 control-label">Agence<span style="color:red">*</span>
+            </label> 
+            <div class="col-lg-6">
+                <select   ng-model="tsoftitem.agence" required=""  class="form-control"
+                          ng-options="a as a.libelle  for a in agences"   >
+                    <option>--</option>
+                </select>
+            </div>
+
+        </div>
+        <div class="form-group"  >
+            <label    class="col-lg-offset-1 col-lg-2 control-label">Trajet<span style="color:red">*</span>
+            </label> 
+            <div class="col-lg-6">
+                <select   ng-model="tsoftitem.trajet" required=""  class="form-control"
+                          ng-options="t as t.libelle  for t in trajets"   >
+                    <option>--</option>
+                </select>
+            </div>
+
+        </div>
+        <div class="form-group"  >
+            <label    class="col-lg-offset-1 col-lg-2 control-label">Heure Depart<span style="color:red">*</span>
+            </label> 
+            <div class="col-lg-6">
+                <input    class="form-control"  required=""   type="time"    ng-model="tsoftitem.heure_depart"   ng-model-options="{timezone:'UTC'}" /> 
+            </div>
+
+        </div>
+        <div class="form-group"  >
+            <label    class="col-lg-offset-1 col-lg-2 control-label">Periode<span style="color:red">*</span>
+            </label> 
+            <div class="col-lg-3">
+                <input    class="form-control"   required="" type="date"    ng-model="tsoftitem.date_debut"   ng-model-options="{timezone:'UTC'}" />
+            </div>
+            <div class="col-lg-3">
+                <input    class="form-control"  required=""  type="date"  ng-disabled="!tsoftitem.date_debut"  ng-min="tsoftitem.date_debut" ng-model="tsoftitem.date_fin"   ng-model-options="{timezone:'UTC'}" />
+            </div>
+
+        </div>
+
+        <div class="form-group"  >
+            <label    class="col-lg-offset-1 col-lg-2 control-label">Frequence
+            </label>
+            <div class="col-lg-6">
+                <div class="checkbox">
+                    <label class="i-checks">
+                        <input type="checkbox" checked  ng-model="tsoftitem.frequent_lundi"><i></i> Chaque Lundi
+                    </label>
+                </div> 
+                 <div class="checkbox">
+                    <label class="i-checks">
+                        <input type="checkbox" checked  ng-model="tsoftitem.frequent_mardi"><i></i> Chaque Mardi
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label class="i-checks">
+                        <input type="checkbox" checked  ng-model="tsoftitem.frequent_mercredi"><i></i> Chaque Mercredi
+                    </label>
+                </div>
+                 <div class="checkbox">
+                    <label class="i-checks">
+                        <input type="checkbox" checked  ng-model="tsoftitem.frequent_jeudi"><i></i> Chaque Jeudi
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label class="i-checks">
+                        <input type="checkbox" checked  ng-model="tsoftitem.frequent_vendredi"><i></i> Chaque Vendredi
+                    </label>
+                </div>
+                 <div class="checkbox">
+                    <label class="i-checks">
+                        <input type="checkbox" checked  ng-model="tsoftitem.frequent_samedi"><i></i> Chaque Samedi
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label class="i-checks">
+                        <input type="checkbox" checked  ng-model="tsoftitem.frequent_dimanche"><i></i> Chaque Dimanche
+                    </label>
+                </div>
+            </div>
+        </div>
+     
+        <div class="form-group">
+            <div class="col-lg-offset-3 col-lg-10">
+                <button    type="button" class="btn btn-default"  ng-click="closemodal()"  >{{'form.reset'| translate}}</button>
+                <button type="submit" class="btn btn-primary"    ng-disabled="form.$invalid || form.$pristine"    >
+                    <i class="fa fa-save"  ng-show="!errorService.waiting">{{'form.save'| translate}}</i>
+                    <i class="fa fa-spinner faa-spin animated" ng-show="errorService.waiting"></i>
+                    <span ng-show="errorService.waiting">Loading...</span>
+                </button> 
+            </div>
+
+        </div> 
+    </form>
+
+</div> 
+
+
+
+
+
+
+

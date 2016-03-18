@@ -1,0 +1,68 @@
+<div class="bg-light lter b-b wrapper-md">
+    <h1 class="m-n font-thin h3"><i class="icon-like pull-left"></i> Feedback</h1>
+</div>
+<div class="wrapper-md"   ng-controller="FeedbackCtrl">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <form role="form">
+                        <!-- rating -->
+                        <div  class="m-b-lg"  ng-show="!edited">
+                            <h4>Note</h4>
+                            <div ng-init="item.note = 5" class="m-b text-lg">
+                                <rating ng-model="item.note" max="5" state-on="'fa fa-star text-warning'" state-off="'fa fa-star-o'"></rating> <b>({{item.note}})</b>
+                            </div>
+
+                        </div>
+                        <!-- / rating -->
+
+                        <div class="form-group"  ng-show="!edited" ng-init="item.commentaires = 'J\'apprecie vraiment cette application'">
+
+                            <label class="control-label">Commentaire</label>
+                            <textarea type="text" class="form-control"  ng-model="item.commentaires"  ></textarea>
+                        </div>
+
+                        <div class="form-group"  ng-show="!edited">
+                            <input type="hidden"  ng-model="item.codeparticipant"  ng-init="item.codeparticipant=contact" >
+                            <button type="button" ng-click="$state.go('app.accueil')" class="btn btn-default">Abandonner </button>
+                            <button type="button" class="btn btn-primary"  ng-click="send()">Envoyer <i class="fa fa-spin fa-spinner" ng-show="spinner"></i></button>
+
+                        </div>                   
+                        <div class="form-group"  ng-show="edited">
+                            
+                            <p class="form-control-static"  style="font-size: xx-large;"  ><i class="icon-emoticon-smile"> </i>Merci de nous avoir donné votre feedback</p>
+                            <button type="button" ng-click="$state.go('app.accueil')" class="btn btn-default"><i class="icon-home  pull-left"></i>Retour </button>
+                        </div>  
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    app.controller('FeedbackCtrl', ['$scope', '$state', '$rootScope', '$http'
+            , function($scope, $state, $rootScope, $http) {
+                
+
+                $scope.send = function() {
+                    $http({
+                        method: 'POST',
+                        url: $scope.baseurl + '/rest/Feedback/save',
+                        data: $.param($scope.item), // pass in data as strings
+                        headers: {'Content-Type': 'application/x-www-form-urlencoded'}  // set the headers so angular passing info as form data (not request payload)
+                    })
+                            .success(function(data) {
+                                $scope.edited = true;
+                                $scope.spinner = false;
+                            })
+                            .error(function(data) {
+                                $scope.open('sm', data);
+                                $scope.spinner = false;
+                            });
+                };
+
+            }])
+        ;
+</script>

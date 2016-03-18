@@ -1,0 +1,162 @@
+<div class="bg-light lter b-b wrapper-md" >
+    <h1 class="m-n font-thin h3">Chauffeur</h1>
+    <small class="text-muted">{{'search.legend'| translate }}</small>
+</div>
+
+<div class="wrapper-md"  ng-controller="ChauffeurList">
+
+    <div class="panel panel-default">
+        <div class="panel-body table-responsive">
+            <table datatable="" dt-options="dtOptions" 
+                   dt-columns="dtColumns" 
+                   class="table table-striped table-bordered table-hover" 
+                   id="dataTables-example" width="100%">
+            </table>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+<script type="text/javascript" >
+
+    app.controller("ChauffeurList",
+            function ChauffeurList($scope, $http, toaster, $state, ErrorService, $stateParams, DTColumnBuilder, DTOptionsBuilder, $modal, $log) {
+                $scope.categorie = 'Chauffeur';
+                $scope.dtColumns = [
+                    DTColumnBuilder.newColumn('code').withTitle('code').notVisible(),
+                    DTColumnBuilder.newColumn('nom_prenom').withTitle('Nom'),
+                    DTColumnBuilder.newColumn('telephone').withTitle('Telephone'),
+                     DTColumnBuilder.newColumn('compagnie.libelle').withTitle('Agence'),
+                     DTColumnBuilder.newColumn('numero_cni').withTitle('Numero CNI'),
+                ];
+
+                $scope.dtOptions = DTOptionsBuilder
+                        .fromSource($scope.categorie+'/list')
+                        .withPaginationType('full')
+                        .withBootstrap()
+                        // Add Table tools compatibility
+                        .withTableTools('vendor/jquery/datatables/copy_csv_xls.swf')
+                        .withTableToolsOption("sRowSelect", "multi")
+                        .withTableToolsButtons([
+                            "addrow", "editrow", "delrow", "csv", "select_all", "select_none"
+                        ])
+                        ;
+
+
+                $.fn.dataTable.TableTools.buttons.addrow = $.extend(
+                        {}, $.fn.dataTable.TableTools.buttonBase,
+                        {
+                            "sButtonText": "<i class=\"fa fa-plus\"></i>",
+                            "sToolTip": "New Data",
+                            "fnClick": function (nButton, oConfig) {
+                                $scope.openFormChauffeur('lg', -1);
+                            }
+
+                        }
+                );
+                $.fn.dataTable.TableTools.buttons.editrow = $.extend(
+                        {}, $.fn.dataTable.TableTools.BUTTONS.select,
+                        {
+                            "sButtonText": "<i class=\"fa fa-edit\"></i>",
+                            "sToolTip": "Edit Data",
+                            "fnClick": function (nButton, oConfig) {
+                                $scope.openFormChauffeur('lg', (this.fnGetSelectedData()[0]).code);
+                            }
+                        }
+                );
+
+                $.fn.dataTable.TableTools.buttons.delrow = $.extend(
+                        {}, $.fn.dataTable.TableTools.BUTTONS.select,
+                        {
+                            "sButtonText": "<i class=\"fa fa-trash-o\"></i>",
+                            "sToolTip": "Delete Data",
+                            "fnClick": function (nButton, oConfig) {
+                                //confirm dialogue
+                                var r = confirm("Confirm ?");
+                                if (r == true) {
+                                    $http.get($scope.categorie + '/del/' + (this.fnGetSelectedData()[0]).code)
+                                            .success(function (data) {
+                                                toaster.pop("success", "Success", "Suppression Effectuée avec Succès");
+                                                $('#dataTables-example').DataTable().ajax.reload();
+                                            }).error(function (data) {
+                                        toaster.pop("error", "Error", data);
+                                        $('#dataTables-example').DataTable().ajax.reload();
+                                    });
+                                }
+                                ;
+
+                            }
+                        }
+                );
+
+
+                $scope.openFormChauffeur = function (size, code) {
+                    var modalInstance = $modal.open({
+                        templateUrl: 'tpl/Chauffeur_form.html',
+                        controller: 'ChauffeurForm',
+                        size: size,
+                        resolve: {
+                            code: function () {
+                                return code;
+                            }
+                        }
+                    });
+
+                    modalInstance.result.then(function () {
+                        $log.info('Modal closed at: ' + new Date());
+//                    $state.reload();
+                        $('#dataTables-example').DataTable().ajax.reload();
+                    }, function () {
+                        $log.info('Modal dismissed at: ' + new Date());
+//                    $state.reload();
+                        $('#dataTables-example').DataTable().ajax.reload();
+                    });
+                };
+
+
+            });
+
+    app.controller("ChauffeurForm",
+            function ChauffeurForm($scope, $modalInstance, $http, toaster, ErrorService, $stateParams, code) {
+                $scope.categorie = 'Chauffeur';
+                $scope.errorService = ErrorService;
+                $scope.errorService.clear();
+
+                $http.get($scope.categorie + '/find/' + code)
+                        .success(function (data) {
+                            $scope.tsoftitem = data;
+                        });
+                $http.get( 'Compagnie/list')
+                        .success(function (data) {
+                            $scope.compagnies = data;
+                        });
+               
+                $scope.master = angular.copy($scope.tsoftitem);
+
+                $scope.reset = function () {
+                    $scope.tsoftitem = angular.copy($scope.master);
+                    $scope.form.$setPristine();
+                };
+
+                $scope.save = function () {
+                    $scope.errorService.setwaiting();
+                    $http.post($scope.categorie + '/save',$scope.tsoftitem)
+                            .success(function (data) {
+                                toaster.pop("success", "Success", "Operation Effectuée avec Succès");
+                                $scope.errorService.setSucces();
+                                $scope.closemodal();
+                            });
+                };
+
+                $scope.closemodal = function () {
+                    $modalInstance.dismiss('cancel');
+                };
+
+
+
+
+            });
+</script>

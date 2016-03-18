@@ -1,0 +1,83 @@
+
+
+<div class="modal-header">
+    <button type="button" class="btn btn-link pull-right"  ng-click="closemodal()" >
+        <i class="fa fa-remove"></i>  
+    </button>
+    <h3 class="modal-title"> {{categorie}}</h3>
+    <small class="text-muted"  translate="form.legend">Fields marked with * are required</small>
+</div>
+<div class="modal-body" >
+    <form      ng-submit="save()"  novalidate="true"
+               name="form"   method="POST"    id="form"    class="bs-example form-validation form-horizontal" >
+
+
+        <div class="form-group"  >
+            <label    class="col-lg-offset-1 col-lg-2 control-label">Trajet<span style="color:red">*</span>
+            </label> 
+            <div class="col-lg-6">
+                <select   ng-model="tsoftitem.trajet" required=""  class="form-control"
+                          ng-options="v as v.libelle  for v in trajets"   >
+                    <option>--</option>
+                </select>
+            </div>
+
+        </div>
+        <fieldset>
+            <legend>VIP</legend>
+            <div class="form-group"  >
+                <label    class="col-lg-offset-1 col-lg-2 control-label">Aller Simple
+                    <span style="color:red">*</span>
+                </label> 
+                <div class="col-lg-6"><input type="number" class="form-control"  required=""  ng-model="tsoftitem.prix_vip_aller"></div>
+
+            </div>
+            <div class="form-group"  >
+                <label    class="col-lg-offset-1 col-lg-2 control-label">Aller Retour
+                    <span style="color:red">*</span>
+                </label> 
+                <div class="col-lg-6"><input type="number" class="form-control"  required=""  ng-model="tsoftitem.prix_vip_aller_retour"></div>
+
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>Classic</legend>
+            <div class="form-group"  >
+                <label    class="col-lg-offset-1 col-lg-2 control-label">Aller Simple
+                    <span style="color:red">*</span>
+                </label> 
+                <div class="col-lg-6"><input type="number" class="form-control"  required=""  ng-model="tsoftitem.prix_classic_aller"></div>
+
+            </div>
+            <div class="form-group"  >
+                <label    class="col-lg-offset-1 col-lg-2 control-label">Aller Retour
+                    <span style="color:red">*</span>
+                </label> 
+                <div class="col-lg-6"><input type="number" class="form-control"  required=""  ng-model="tsoftitem.prix_classic_aller_retour"></div>
+
+            </div>
+        </fieldset>
+
+
+
+        <div class="form-group">
+            <div class="col-lg-offset-3 col-lg-10">
+                <button    type="button" class="btn btn-default"  ng-click="closemodal()"  >{{'form.reset'| translate}}</button>
+                <button type="submit" class="btn btn-primary"    ng-disabled="form.$invalid || form.$pristine"    >
+                    <i class="fa fa-save"  ng-show="!errorService.waiting">{{'form.save'| translate}}</i>
+                    <i class="fa fa-spinner faa-spin animated" ng-show="errorService.waiting"></i>
+                    <span ng-show="errorService.waiting">Loading...</span>
+                </button> 
+            </div>
+
+        </div> 
+    </form>
+
+</div> 
+
+
+
+
+
+
+

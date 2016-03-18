@@ -1,0 +1,118 @@
+<!-- list -->
+<ul class="nav" >
+    <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
+        <span >Menu</span>
+    </li>
+   <li ui-sref-active="active">
+        <a ui-sref="app.dashboard">
+            <i class="glyphicon glyphicon-stats icon text-info-lter"></i>
+            <span class="font-bold" >Dashboard</span>
+        </a>
+    </li>
+
+     <li>
+        <a href class="auto">      
+            <span class="pull-right text-muted">
+                <i class="fa fa-fw fa-angle-right text"></i>
+                <i class="fa fa-fw fa-angle-down text-active"></i>
+            </span>
+            <i class="fa fa-clock-o icon text-primary-dker"></i>
+            <span class="font-bold">Voyage</span>
+        </a>
+        <ul class="nav nav-sub dk">
+            <li class="nav-sub-header">
+                <a href>
+                    <span >Voyage</span>
+                </a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="app.table.list({categorie:'Voyage'})">
+                    <i class="fa fa-clock-o icon text-info-lter"></i>
+                    <span class="font-bold">Voyage</span>
+                </a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="app.table.list({categorie:'VoyageSchedule'})">
+                    <i class="fa fa-calendar icon text-info-lter"></i>
+                    <span class="font-bold">Schedule</span>
+                </a>
+            </li>
+        </ul>
+    </li>
+
+    
+    <li ui-sref-active="active">
+        <a ui-sref="app.table.list({categorie:'Bus'})">
+            <i class="fa fa-car icon text-info-lter"></i>
+            <span class="font-bold" >Bus</span>
+        </a>
+    </li>
+   
+   
+    <li>
+        <a href class="auto">      
+            <span class="pull-right text-muted">
+                <i class="fa fa-fw fa-angle-right text"></i>
+                <i class="fa fa-fw fa-angle-down text-active"></i>
+            </span>
+            <i class="fa fa-users icon text-primary-dker"></i>
+            <span class="font-bold">Employe</span>
+        </a>
+        <ul class="nav nav-sub dk">
+            <li class="nav-sub-header">
+                <a href>
+                    <span >Employe</span>
+                </a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="app.table.list({categorie:'Chauffeur'})">
+                    <i class="fa fa-user icon text-info-lter"></i>
+                    <span class="font-bold">Chauffeur</span>
+                </a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="app.table.list({categorie:'User'})">
+                    <i class="fa fa-user icon text-info-lter"></i>
+                    <span class="font-bold">User</span>
+                </a>
+            </li>
+        </ul>
+    </li>
+    <li ui-sref-active="active">
+        <a ui-sref="app.table.list({categorie:'Compagnie'})">
+            <i class="fa fa-institution icon text-info-lter"></i>
+            <span class="font-bold">Agence</span>
+        </a>
+    </li>
+    <li>
+        <a href class="auto">      
+            <span class="pull-right text-muted">
+                <i class="fa fa-fw fa-angle-right text"></i>
+                <i class="fa fa-fw fa-angle-down text-active"></i>
+            </span>
+            <i class="glyphicon glyphicon-wrench icon text-primary-dker"></i>
+            <span class="font-bold">Settings</span>
+        </a>
+        <ul class="nav nav-sub dk">
+            <li class="nav-sub-header">
+                <a href>
+                    <span >Settings</span>
+                </a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="app.table.list({categorie:'Trajet'})">
+                    <i class="icon-shuffle icon text-info-lter"></i>
+                    <span class="font-bold">Trajet</span>
+                </a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="app.table.list({categorie:'Ville'})">
+                    <i class="fa fa-globe icon text-info-lter"></i>
+                    <span class="font-bold">Ville</span>
+                </a>
+            </li>
+        </ul>
+    </li>
+
+</ul>
+<!-- / list -->
