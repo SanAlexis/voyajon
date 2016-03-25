@@ -38,23 +38,23 @@ public class EmployeController {
                 SecurityUtils.getCurrentUser() != null ? OK : UNAUTHORIZED);
     }
 
-    @RequestMapping(value = "/User/list", method = RequestMethod.GET)
+    @RequestMapping(value = "/User", method = RequestMethod.GET)
     public ResponseEntity<List<User>> listUser() {
         return new ResponseEntity<>(userRepository.findAll(), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/User/find/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/User/{id}", method = RequestMethod.GET)
     public ResponseEntity<User> findUser(@PathVariable Integer id) {
         User v = userRepository.findOne(id);
         return new ResponseEntity<>(v != null ? v : new User(), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/User/save", method = RequestMethod.POST)
+    @RequestMapping(value = "/User", method = RequestMethod.POST)
     public ResponseEntity<User> saveUser(@RequestBody User v) {
         return new ResponseEntity<>(userRepository.save(v), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/User/del/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/User/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<HttpStatus> delUser(@PathVariable Integer id) throws Exception {
         userRepository.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -62,23 +62,23 @@ public class EmployeController {
     
     
     
-     @RequestMapping(value = "/Chauffeur/list", method = RequestMethod.GET)
+     @RequestMapping(value = "/Chauffeur", method = RequestMethod.GET)
     public ResponseEntity<List<Chauffeur>> listChauffeur() {
         return new ResponseEntity<>(chauffeurRepository.findAll(), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/Chauffeur/find/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/Chauffeur/{id}", method = RequestMethod.GET)
     public ResponseEntity<Chauffeur> findChauffeur(@PathVariable Integer id) {
         Chauffeur v = chauffeurRepository.findOne(id);
         return new ResponseEntity<>(v != null ? v : new Chauffeur(), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/Chauffeur/save", method = RequestMethod.POST)
+    @RequestMapping(value = "/Chauffeur", method = RequestMethod.POST)
     public ResponseEntity<Chauffeur> saveChauffeur(@RequestBody Chauffeur v) {
         return new ResponseEntity<>(chauffeurRepository.save(v), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/Chauffeur/del/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/Chauffeur/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<HttpStatus> delChauffeur(@PathVariable Integer id) throws Exception {
         chauffeurRepository.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);

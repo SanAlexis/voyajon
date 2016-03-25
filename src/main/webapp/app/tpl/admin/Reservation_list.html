@@ -1,0 +1,163 @@
+<div class="bg-light lter b-b wrapper-md" >
+    <h1 class="m-n font-thin h3">Reservation</h1>
+    <small class="text-muted">{{'search.legend'| translate }}</small>
+</div>
+
+<div class="wrapper-md"  ng-controller="ReservationList">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <form class="form-inline form-validation" role="form"  NAME="searchform1"     ng-submit="search()">
+                <div class="form-group">
+                    <label>ID Reservation<span style="color:red">*</span></label>
+                    <input type="number"  required=""  ng-model="coderesa"  class="form-control">
+                </div>
+
+                <div class="form-group">
+                    <button class="btn btn-primary" type="submit" >
+                        <i class="fa fa-search"  ng-show="!errorService.waiting">{{'search.mot'| translate }}</i>
+                        <i class="fa fa-spinner faa-spin animated" ng-show="errorService.waiting"></i>
+                        <span ng-show="errorService.waiting">Loading...</span>
+                    </button>
+                </div>
+
+                <div class="form-group pull-right">
+                    <label  class="control-label">Show</label>
+                    <select class="form-control" ng-model="itemsByPage">
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option  value="25">25</option>
+                        <option value="50">50</option>
+                        <option  value="100">100</option>
+                    </select>
+                </div>
+            </form>
+
+        </div>
+        <div class="panel-body table-responsive">
+            <table  class="table table-striped table-bordered table-hover"  st-safe-src="rowCollection"  st-table="displayedCollection">
+                <thead>
+                    <tr>
+                        <th st-sort="code">ID</th>
+                        <th st-sort="date_creation">Date Reservation</th>
+                        <th st-sort="nbre_places">Nombre Places</th>
+                        <th st-sort="enabled">Statut</th>
+                        <th >Trajet</th>
+                        <th >Agence</th>
+                        <th >Date Voyage</th>
+                        <th> 
+                            <button type="button" class="btn btn-primary" ng-click="add();"  
+                                    tooltip="{{'form.add'| translate}}">
+                                <i class="fa fa-plus"></i>  
+                            </button>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="row in displayedCollection" st-select-row="row">
+                        <td>{{row.code}}</td>
+                        <td>{{row.dateReservation}},{{row.heureReservation}}</td>
+                        <td>{{row.nbre_places}}</td>
+                        <td>{{row.enabled}}</td>
+                        <td>{{row.voyage.trajet.libelle}}</td>
+                        <td> {{row.voyage.agence.libelle}}</td>
+                        <td> {{row.voyage.dateDepart}} , {{row.voyage.heureDepart}} </td>
+
+                        <td>
+                            <button type="button" ng-click="edit(row);" class="btn btn-sm btn-default">
+                                <i class="fa fa-edit">
+                                </i>
+                            </button>
+
+                            <button type="button" ng-click="delete(row);" class="btn btn-sm btn-danger">
+                                <i class="fa fa-remove">
+                                </i>
+                            </button>
+                            <button type="button" ng-click="voirPassagers(row.code);" class="btn btn-sm btn-danger">
+                                <i class="fa fa-male">
+                                </i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td   class="text-center">
+                            <div st-pagination="" st-items-by-page="itemsByPage"  class="no-margin"></div>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+
+
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript" >
+
+    app.controller("ReservationList",
+            function ReservationList($scope, $modal, $log, toaster, $state, ErrorService, CrudService) {
+                $scope.categorie = 'Reservation';
+                $scope.rowCollection = CrudService.query({categorie: $scope.categorie});
+                //  pagination
+                $scope.itemsByPage = 10;
+
+                $scope.search = function () {
+                    CrudService.get({categorie: $scope.categorie, id: $scope.coderesa}, function (data) {
+                        alert(data.code);
+                        $scope.rowCollection = {};
+                        $scope.rowCollection.push(data);
+                    });
+                };
+                $scope.delete = function (row) {
+
+                };
+                $scope.edit = function (row) {
+                    $state.go('app.form.elt', {categorie: $scope.categorie, id: row.code});
+                };
+                $scope.add = function () {
+                    $state.go('app.form.elt', {categorie: $scope.categorie});
+                };
+
+                $scope.voirPassagers = function (idresa) {
+                    var modalInstance = $modal.open({
+                        templateUrl: 'tpl/admin/Passager_form.html',
+                        controller: 'PassagerForm',
+                        size: 'lg',
+                        resolve: {
+                            idresa: function () {
+                                return idresa;
+                            }
+                        }
+                    });
+
+                    modalInstance.result.then(function () {
+                        $log.info('Modal closed at: ' + new Date());
+                    }, function () {
+                        $log.info('Modal dismissed at: ' + new Date());
+                    });
+                };
+
+            });
+
+    app.controller("PassagerForm",
+            function PassagerForm($scope, $modalInstance, toaster, ErrorService, CrudService, idresa) {
+
+                $scope.errorService = ErrorService;
+                $scope.errorService.clear();
+                $scope.isFormMode=false;
+
+                $scope.passagers = CrudService.query({categorie: 'ReservationPassager',id:idresa});
+                
+                $scope.closemodal = function () {
+                    $modalInstance.dismiss('cancel');
+                };
+
+
+
+            });
+
+</script>

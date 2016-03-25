@@ -1,0 +1,61 @@
+
+
+<div class="modal-header">
+    <button type="button" class="btn btn-link pull-right"  ng-click="closemodal()" >
+        <i class="fa fa-remove"></i>  
+    </button>
+    <h3 class="modal-title"> {{categorie}}</h3>
+    <small class="text-muted"  translate="form.legend">Fields marked with * are required</small>
+</div>
+<div class="modal-body" >
+    <form      ng-submit="save()"  novalidate="true"
+               name="form1"   method="POST"    id="form1"    class="form-validation  form-horizontal"  ng-if="!masse">
+        <div class="form-group"  >
+            <label    class="col-lg-offset-1 col-lg-2 control-label">Nom
+                <span style="color:red">*</span>
+            </label> 
+            <div class="col-lg-6">
+                <input type="text" class="form-control"  required=""  ng-model="tsoftitem.libelle"  >
+            </div>
+
+        </div>
+        <div class="form-group"  >
+            <div class="col-lg-offset-3 col-lg-10">
+                <button    type="button" class="btn btn-default"  ng-click="closemodal()"  >{{'form.reset'| translate}}</button>
+                <button type="submit" class="btn btn-primary"    ng-disabled="form.$invalid || form.$pristine"    >
+                    <i class="fa fa-save"  ng-show="!errorService.waiting">{{'form.save'| translate}}</i>
+                    <i class="fa fa-spinner faa-spin animated" ng-show="errorService.waiting"></i>
+                    <span ng-show="errorService.waiting">Loading...</span>
+                </button>
+            </div>
+        </div>
+    </form>
+    <form      ng-submit="saveAll()"  novalidate="true"
+               name="form1"   method="POST"    id="form1"    class="form-validation  form-horizontal" ng-if="masse">
+        <div class="form-group"  >
+            <label    class="col-lg-offset-1 col-lg-2 control-label">Noms des villes separés par des virgules
+                
+            </label> 
+            <div class="col-lg-6">
+                <input type="text" class="form-control"  required=""  ng-model="tsoftitem.libelle"   ng-list="">
+            </div>
+
+        </div>
+        <div class="form-group"  >
+            <div class="col-lg-offset-3 col-lg-10">
+                <button    type="button" class="btn btn-default"  ng-click="closemodal()"  >{{'form.reset'| translate}}</button>
+                <button type="submit" class="btn btn-primary"    ng-disabled="form.$invalid || form.$pristine"    >
+                    <i class="fa fa-save"  ng-show="!errorService.waiting">{{'form.save'| translate}}</i>
+                    <i class="fa fa-spinner faa-spin animated" ng-show="errorService.waiting"></i>
+                    <span ng-show="errorService.waiting">Loading...</span>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+
+
+

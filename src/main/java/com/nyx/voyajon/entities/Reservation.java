@@ -7,9 +7,11 @@ package com.nyx.voyajon.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nyx.voyajon.model.superclass.AuditEntity;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -33,6 +35,12 @@ public class Reservation  extends AuditEntity{
     private Voyage voyage;
     @Enumerated(EnumType.STRING)
     private ReservationMode mode;
+    @Column(name = "date_reservation")
+    @NotNull
+    private LocalDate  dateReservation;
+    @Column(name = "heure_reservation")
+    @NotNull
+    private LocalTime  heureReservation;
     @NotNull
     private boolean  enabled;
     @Formula("(select count(p.code) from Passager p where p.reservation_code=code)")
@@ -93,6 +101,22 @@ public class Reservation  extends AuditEntity{
 
     public void setPassagers(List<Passager> passagers) {
         this.passagers = passagers;
+    }
+
+    public LocalDate getDateReservation() {
+        return dateReservation;
+    }
+
+    public void setDateReservation(LocalDate dateReservation) {
+        this.dateReservation = dateReservation;
+    }
+
+    public LocalTime getHeureReservation() {
+        return heureReservation;
+    }
+
+    public void setHeureReservation(LocalTime heureReservation) {
+        this.heureReservation = heureReservation;
     }
 
   

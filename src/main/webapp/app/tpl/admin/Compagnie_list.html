@@ -1,0 +1,98 @@
+
+<div class="bg-light lter b-b wrapper-md" >
+    <h1 class="m-n font-thin h3">Compagnie</h1>
+    <small class="text-muted">{{'search.legend'| translate }}</small>
+</div>
+
+<div class="wrapper-md"  ng-controller="CompagnieList">
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <form class="form-inline">
+                <label>Show</label>
+                <select class="form-control" ng-model="itemsByPage">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option  value="25">25</option>
+                    <option value="50">50</option>
+                    <option  value="100">100</option>
+                </select>
+            </form>
+        </div>
+        <div class="panel-body table-responsive">
+            <table class="table table-striped table-bordered table-hover"  st-safe-src="rowCollection"  st-table="displayedCollection">
+                <thead>
+                    <tr>
+                        <th st-sort="libelle">Nom</th>
+                        <th st-sort="siteweb">Site Web</th>
+                        <th> 
+                            <button type="button" class="btn btn-primary" ng-click="add();"  
+                                    tooltip="{{'form.add'| translate}}">
+                                <i class="fa fa-plus"></i>  
+                            </button>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="row in displayedCollection">
+                        <td>{{row.libelle}}</td>
+                        <td>{{row.siteweb}}</td>
+                        <td>
+                            <button type="button" ng-click="edit(row);" class="btn btn-sm btn-default">
+                                <i class="fa fa-edit">
+                                </i>
+                            </button>
+
+                            <button type="button" ng-click="delete(row);" class="btn btn-sm btn-danger">
+                                <i class="fa fa-trash">
+                                </i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td   class="text-center">
+                            <div st-pagination="" st-items-by-page="itemsByPage"  class="no-margin"></div>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script type="text/javascript" >
+
+    app.controller("CompagnieList",
+            function CompagnieList($scope, CrudService, toaster, $state) {
+                $scope.categorie = 'Compagnie';
+                $scope.rowCollection = CrudService.query({categorie: $scope.categorie});
+                //  pagination
+                $scope.itemsByPage = 10;
+
+                $scope.delete = function (row) {
+                    var r = confirm("Confirm ?");
+                    if (r == true) {
+                        CrudService.delete({categorie: $scope.categorie, id: row.code}, function (data) {
+                            $scope.rowCollection = CrudService.query({categorie: $scope.categorie});
+                            toaster.pop("success", "Success", "Suppression Effectuée avec Succès");
+                        }, function (error) {
+                            toaster.pop("error", "Error", error);
+                        });
+                    }
+                };
+                $scope.edit = function (row) {
+                    $state.go('app.form.elt', {categorie: $scope.categorie, id: row.code});
+                };
+                $scope.add = function () {
+                    $state.go('app.form.elt', {categorie: $scope.categorie,id:-1});
+                };
+
+            });
+</script>
+
+

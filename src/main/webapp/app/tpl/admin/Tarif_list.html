@@ -1,0 +1,149 @@
+<div class="box-body  table-responsive"  ng-controller="TarifList">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <form class="form-inline">
+                <label>Show</label>
+                <select class="form-control" ng-model="itemsByPage">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option  value="25">25</option>
+                    <option value="50">50</option>
+                    <option  value="100">100</option>
+                </select>
+            </form>
+        </div>
+        <div class="panel-body table-responsive">
+            <table class="table table-striped table-bordered table-hover"  st-safe-src="rowCollection"  st-table="displayedCollection">
+                <thead>
+                    <tr>
+                        <th st-sort="trajet.libelle">Trajet</th>
+                        <th st-sort="prix_classic_aller">Classic Aller Simple</th>
+                        <th st-sort="prix_classic_aller_retour">Classic Aller Retour</th>
+                        <th st-sort="prix_vip_aller">VIP Aller Simple</th>
+                        <th st-sort="prix_vip_aller_retour">VIP Aller Retour</th>
+
+                        <th> 
+                            <button type="button" class="btn btn-primary" ng-click="add();"  
+                                    tooltip="{{'form.add'| translate}}">
+                                <i class="fa fa-plus"></i>  
+                            </button>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="row in displayedCollection">
+                        <td>{{row.trajet.libelle}}</td>
+                        <td>{{row.prix_classic_aller |  number:0}}</td>
+                        <td>{{row.prix_classic_aller_retour |  number:0}}</td>
+                        <td>{{row.prix_vip_aller |  number:0}}</td>
+                        <td>{{row.prix_vip_aller_retour  |  number:0}}</td>
+                        <td>
+                            <button type="button" ng-click="edit(row);" class="btn btn-sm btn-default">
+                                <i class="fa fa-edit">
+                                </i>
+                            </button>
+
+                            <button type="button" ng-click="delete(row);" class="btn btn-sm btn-danger">
+                                <i class="fa fa-trash">
+                                </i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td   class="text-center">
+                            <div st-pagination="" st-items-by-page="itemsByPage"  class="no-margin"></div>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script type="text/javascript" >
+
+    app.controller("TarifList",
+            function TarifList($scope, $http, toaster, $state, CrudService, $stateParams, $modal, $log) {
+                $scope.categorie = 'Tarif';
+                $scope.rowCollection = CrudService.query({categorie: $scope.categorie + 'list', id: $stateParams.id});
+
+                $scope.itemsByPage = 10;
+
+                $scope.delete = function (row) {
+                    CrudService.delete({categorie: $scope.categorie, id: row.code}, function (data) {
+                        var index = $scope.rowCollection.indexOf(row);
+                        if (index !== -1) {
+                            $scope.rowCollection.splice(index, 1);
+                        }
+                        toaster.pop("success", "Success", "Suppression Effectuée avec Succès");
+                    });
+                };
+
+                $scope.edit = function (row) {
+                    CrudService.get({categorie: $scope.categorie, id: row.code}, function (data) {
+                        $scope.tsoftitem = data;
+                        $scope.openForm('lg', $scope.tsoftitem, $scope.rowCollection.indexOf(row));
+                    });
+                };
+                $scope.add = function () {
+                    $scope.tsoftitem = {};
+                    $scope.openForm('lg', {}, -1);
+                };
+
+
+                $scope.openForm = function (size, row, rowindex) {
+                    var modalInstance = $modal.open({
+                        templateUrl: 'tpl/admin/' + $scope.categorie + '_form.html',
+                        controller: $scope.categorie + 'Form',
+                        size: size,
+                        resolve: {
+                            row: function () {
+                                return row;
+                            }
+                        }
+                    });
+
+                    modalInstance.result.then(function () {
+                        $scope.rowCollection = CrudService.query({categorie: $scope.categorie + 'list', id: $stateParams.id});
+                        $log.info('Modal closed at: ' + new Date());
+                    }, function () {
+                        $log.info('Modal dismissed at: ' + new Date());
+                    });
+                };
+
+
+
+
+            });
+
+    app.controller("TarifForm",
+            function TarifForm($scope, $modalInstance, $stateParams, toaster, ErrorService, CrudService, row) {
+                $scope.categorie = 'Tarif';
+                $scope.errorService = ErrorService;
+                $scope.errorService.clear();
+
+                $scope.tsoftitem = row;
+
+                $scope.save = function () {
+                    $scope.errorService.setwaiting();
+                    CrudService.save({categorie: $scope.categorie, id: $stateParams.id}, $scope.tsoftitem,
+                            function (data) {
+                                toaster.pop("success", "Success", "Operation Effectuée avec Succès");
+                                $scope.errorService.setSucces();
+                                $modalInstance.close();
+                            });
+                };
+
+                $scope.closemodal = function () {
+                    $modalInstance.dismiss('cancel');
+                };
+
+                $scope.trajets = CrudService.query({categorie: 'Trajet'});
+
+            });
+</script>

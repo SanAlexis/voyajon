@@ -6,7 +6,7 @@
 package com.nyx.voyajon.repositories;
 
 import com.nyx.voyajon.entities.Reservation;
-import com.nyx.voyajon.entities.PassagerStatut;
+import java.time.LocalDate;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -18,6 +18,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
 
   //  public List<Reservation> findByStatut(PassagerStatut status);
 
-    public Reservation findByCode(Integer code);
+    public List<Reservation> findByDateReservation(LocalDate dateReservation);
 
 }

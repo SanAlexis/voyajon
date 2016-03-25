@@ -3,3 +3,8 @@ revoir le VoyageSchedule User Frienly
 faire les resa coe flixbus
 
 format en entree du date picker
+
+
+ecrire un main avec les 3 types localdate,localtime et localdatetime avec les serializers et deserializers
+
+resa pr la meme agence ,meme trajet ,meme jour impossible en se bassant sur la sesson

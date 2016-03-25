@@ -28,16 +28,16 @@ angular.module('app')
         })
 
         .config(
-                ['$stateProvider', '$urlRouterProvider',
-                    function ($stateProvider, $urlRouterProvider) {
+                ['$stateProvider', '$urlRouterProvider', 'JQ_CONFIG', 'MODULE_CONFIG',
+                    function ($stateProvider, $urlRouterProvider, JQ_CONFIG, MODULE_CONFIG) {
 
                         $urlRouterProvider
                                 .otherwise('/access/404');
                         $stateProvider
-                            // Client
+                                // Client
                                 .state('client', {
                                     abstract: true,
-                                     url: '/client',
+                                    url: '/client',
                                     templateUrl: 'tpl/client/app.html',
                                     authenticate: false,
                                     resolve: {
@@ -63,45 +63,42 @@ angular.module('app')
                                     url: '/feedback',
                                     templateUrl: 'tpl/client/feedback.html'
                                 })
+                                .state('landing', {
+                                    url: '/landing',
+                                    templateUrl: 'tpl/landing.html'
+                                })
                                 .state('app', {
                                     abstract: true,
                                     // url: '/app',
-                                    templateUrl: 'tpl/app.html',
+                                    templateUrl: 'tpl/admin/app.html',
                                     authenticate: true,
-                                    resolve: {
-                                        deps: ['$ocLazyLoad',
-                                            function ($ocLazyLoad) {
-                                                return $ocLazyLoad.load('toaster').
-                                                        then(function () {
-                                                            return $ocLazyLoad.load(['js/controllers/app.js']);
-                                                        }
-                                                        );
-                                            }]
-                                    }
+                                    resolve: load(['toaster', 'js/controllers/app.js'])
                                 })
-                                
-                                
+
+
                                 .state('app.home', {
                                     url: '/home',
                                     templateUrl: 'tpl/blank.html',
                                     authenticate: true
                                 })
+                                // fullCalendar
+                                .state('app.calendar', {
+                                    url: '/calendar',
+                                    templateUrl: 'tpl/admin/Voyage_Calendar.html',
+                                    // use resolve to load other dependences
+                                    resolve: load(['moment', 'fullcalendar', 'ui.calendar'])
+                                })
                                 // table
                                 .state('app.table', {
                                     url: '/list',
                                     template: '<div ui-view></div>',
-                                    resolve: {
-                                        deps: ['$ocLazyLoad',
-                                            function ($ocLazyLoad) {
-                                                return $ocLazyLoad.load(['datatables']);
-                                            }]
-                                    }
+                                    resolve: load('smart-table')
                                 })
                                 .state('app.table.list', {
                                     authenticate: true,
                                     url: '/:categorie',
                                     templateUrl: function ($stateParams) {
-                                        return 'tpl/' + $stateParams.categorie + '_list.html';
+                                        return 'tpl/admin/' + $stateParams.categorie + '_list.html';
                                     }
                                 })
 
@@ -111,78 +108,32 @@ angular.module('app')
                                     url: '/form',
                                     template: '<div ui-view class="fade-in"></div>',
                                     authenticate: true,
-                                    resolve: {
-                                        deps: ['$ocLazyLoad',
-                                            function ($ocLazyLoad) {
-                                                return $ocLazyLoad.load('ui.select');
-                                            }]
-                                    }
+                                    resolve: load('ui.select')
                                 })
                                 .state('app.form.elt', {
-                                    url: '/:categorie',
+                                    url: '/:categorie/:id',
                                     templateUrl: function ($stateParams) {
-                                        return 'tpl/' + $stateParams.categorie + '_form.html';
+                                        return 'tpl/admin/' + $stateParams.categorie + '_form.html';
                                     },
                                     authenticate: true,
-                                    params: {
-                                        id: {value: "-1"}
-                                    }
                                 })
                                 .state('app.form.elt.agence', {
                                     views: {
                                         "AgenceListView": {
-                                            templateUrl: 'tpl/Agence_list.html'
+                                            templateUrl: 'tpl/admin/Agence_list.html'
                                         }
                                     },
-                                    resolve: {
-                                        deps: ['$ocLazyLoad',
-                                            function ($ocLazyLoad) {
-                                                return $ocLazyLoad.load('datatables');
-                                            }]
-
-                                    }
+                                    resolve: load('smart-table')
                                 })
                                 .state('app.form.elt.tarif', {
                                     views: {
                                         "TarifListView": {
-                                            templateUrl: 'tpl/Tarif_list.html'
+                                            templateUrl: 'tpl/admin/Tarif_list.html'
                                         }
                                     },
-                                    resolve: {
-                                        deps: ['$ocLazyLoad',
-                                            function ($ocLazyLoad) {
-                                                return $ocLazyLoad.load('datatables');
-                                            }]
-
-                                    }
+                                    resolve: load('smart-table')
                                 })
-                                 // settings
-                                .state('app.settings', {
-                                    url: '/settings',
-                                    templateUrl: 'tpl/settings.html',
-                                    authenticate: true,
-                                    resolve: {
-                                        deps: ['$ocLazyLoad',
-                                            function ($ocLazyLoad) {
-                                                return $ocLazyLoad.load('datatables');
-                                            }]
 
-                                    }
-                                })
-                                 // settings
-                                .state('app.employe', {
-                                    url: '/employe',
-                                    templateUrl: 'tpl/employe.html',
-                                    authenticate: true,
-                                    resolve: {
-                                        deps: ['$ocLazyLoad',
-                                            function ($ocLazyLoad) {
-                                                return $ocLazyLoad.load('datatables');
-                                            }]
-
-                                    }
-                                })
-                                 
                                 // pages
                                 .state('app.docs', {
                                     url: '/docs',
@@ -200,14 +151,7 @@ angular.module('app')
                                             }]
                                     }
                                 })
-                                .state('app.process', {
-                                    url: '/process/:process',
-                                    templateUrl: function (stateParams) {
-                                        return 'tpl/' + stateParams.process + '.html';
-                                    },
-                                    authenticate: true
 
-                                })
                                 // others
                                 .state('lockme', {
                                     url: '/lockme',
@@ -246,6 +190,40 @@ angular.module('app')
                                     authenticate: true
                                 });
                         ;
+
+
+                        function load(srcs, callback) {
+                            return {
+                                deps: ['$ocLazyLoad', '$q',
+                                    function ($ocLazyLoad, $q) {
+                                        var deferred = $q.defer();
+                                        var promise = false;
+                                        srcs = angular.isArray(srcs) ? srcs : srcs.split(/\s+/);
+                                        if (!promise) {
+                                            promise = deferred.promise;
+                                        }
+                                        angular.forEach(srcs, function (src) {
+                                            promise = promise.then(function () {
+                                                if (JQ_CONFIG[src]) {
+                                                    return $ocLazyLoad.load(JQ_CONFIG[src]);
+                                                }
+                                                angular.forEach(MODULE_CONFIG, function (module) {
+                                                    if (module.name == src) {
+                                                        name = module.name;
+                                                    } else {
+                                                        name = src;
+                                                    }
+                                                });
+                                                return $ocLazyLoad.load(name);
+                                            });
+                                        });
+                                        deferred.resolve();
+                                        return callback ? promise.then(function () {
+                                            return callback();
+                                        }) : promise;
+                                    }]
+                            }
+                        }
                     }
                 ]
                 );

@@ -17,6 +17,15 @@ public class Ville extends SimpleAuditEntity{
     
     private String libelle;
 
+    public Ville() {
+    }
+    
+    
+
+    public Ville(String nom) {
+        this.libelle=nom;
+    }
+
     public String getLibelle() {
         return libelle;
     }

@@ -7,6 +7,7 @@ package com.nyx.voyajon.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nyx.voyajon.model.superclass.SimpleAuditEntity;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -15,6 +16,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.validation.constraints.NotNull;
 import org.hibernate.annotations.Formula;
 
@@ -30,6 +32,7 @@ public class Voyage extends SimpleAuditEntity {
     @ManyToOne
     @NotNull
     private Trajet trajet;
+    private boolean vip;
     @ManyToOne
     @JsonIgnore
     private VoyageSchedule voyageSchedule;
@@ -54,10 +57,8 @@ public class Voyage extends SimpleAuditEntity {
     private Byte nbre_places_confirmees;
     @Formula("(select count(p.code) from Passager p join Reservation r on r.code=p.reservation_code join Voyage v on v.code=r.voyage_code  where v.code=code and p.statut='RESERVE')")
     private Byte nbre_places_reservees;
-//    @Formula("")
-//    private BigDecimal prix;
-
-   
+    @NotNull
+    private BigDecimal tarif;
 
     @OneToMany(mappedBy = "voyage")
     @JsonIgnore
@@ -166,6 +167,25 @@ public class Voyage extends SimpleAuditEntity {
     public void setNbre_places_reservees(Byte nbre_places_reservees) {
         this.nbre_places_reservees = nbre_places_reservees;
     }
-    
 
+    public boolean isVip() {
+        return vip;
+    }
+
+    public void setVip(boolean vip) {
+        this.vip = vip;
+    }
+
+   
+
+    public BigDecimal getTarif() {
+        return tarif;
+    }
+
+    public void setTarif(BigDecimal tarif) {
+        this.tarif = tarif;
+    }
+ 
+    
+    
 }

@@ -4,7 +4,6 @@
 angular.module('app', [
     'tsoftApp.services',
     'ngAnimate',
-    'datatables',
     'ngCookies',
     'ngResource',
     'ngSanitize',
@@ -16,5 +15,6 @@ angular.module('app', [
     'ui.jq',
     'ui.validate',
     'oc.lazyLoad',
-    'pascalprecht.translate'
+    'pascalprecht.translate',
+    'resourceApp'
 ]);

@@ -61,7 +61,7 @@ angular.module('tsoftApp.services', [])
                             $rootScope.$broadcast('event:loginRequired');
                             
                         }
-                        if (rejection.status >= 402 && rejection.status < 510) {
+                        if (rejection.status >= 400 && rejection.status < 510) {
                             ErrorService.setError('Server was unable to find what you were looking for... Sorry!!');
                            console.log(rejection);
                             alert(rejection.data);

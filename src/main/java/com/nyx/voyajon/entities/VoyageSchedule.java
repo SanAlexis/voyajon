@@ -8,7 +8,7 @@ package com.nyx.voyajon.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nyx.voyajon.model.superclass.SimpleAuditEntity;
 import java.time.LocalDate;
-import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -27,29 +27,34 @@ public class VoyageSchedule   extends SimpleAuditEntity{
     @ManyToOne
     @NotNull
     private Trajet  trajet;
-    @NotNull
-    private LocalTime heure_depart;
-    @NotNull
-    private LocalDate  date_debut;
-    @NotNull
-    private LocalDate  date_fin;
     @ManyToOne
     @NotNull
     private Agence  agence;
     
-    private boolean  frequent_lundi;
-    private boolean  frequent_mardi;
-    private boolean  frequent_mercredi;
-    private boolean  frequent_jeudi;
-    private boolean  frequent_vendredi;
-    private boolean  frequent_samedi;
-    private boolean  frequent_dimanche;
+    private boolean  vip;
+    private boolean  classic;
+    
+    
+    @NotNull
+    private LocalDate  date_debut;
+    @NotNull
+    private LocalDate  date_fin;
+    
+    private String horairesLundi;
+    private String horairesMardi;
+    private String horairesMercredi;
+    private String horairesJeudi;
+    private String horairesVendredi;
+    private String horairesSamedi;
+    private String horairesDimanche;
     
     
     @OneToMany(mappedBy = "voyageSchedule",cascade = CascadeType.ALL)
     @JsonIgnore
-    private List<Voyage> voyages;
-
+    private List<Voyage> voyages=new ArrayList();
+//    @OneToMany(mappedBy = "schedule",cascade = CascadeType.ALL)
+//    @JsonIgnore
+//    private List<VoyageHoraire> horaires=new ArrayList();
 
     public Trajet getTrajet() {
         return trajet;
@@ -59,16 +64,28 @@ public class VoyageSchedule   extends SimpleAuditEntity{
         this.trajet = trajet;
     }
 
-    
-
-    
-
-    public LocalTime getHeure_depart() {
-        return heure_depart;
+    public Agence getAgence() {
+        return agence;
     }
 
-    public void setHeure_depart(LocalTime heure_depart) {
-        this.heure_depart = heure_depart;
+    public void setAgence(Agence agence) {
+        this.agence = agence;
+    }
+
+    public boolean isVip() {
+        return vip;
+    }
+
+    public void setVip(boolean vip) {
+        this.vip = vip;
+    }
+
+    public boolean isClassic() {
+        return classic;
+    }
+
+    public void setClassic(boolean classic) {
+        this.classic = classic;
     }
 
     public LocalDate getDate_debut() {
@@ -87,64 +104,6 @@ public class VoyageSchedule   extends SimpleAuditEntity{
         this.date_fin = date_fin;
     }
 
-    public boolean isFrequent_lundi() {
-        return frequent_lundi;
-    }
-
-    public void setFrequent_lundi(boolean frequent_lundi) {
-        this.frequent_lundi = frequent_lundi;
-    }
-
-    public boolean isFrequent_mardi() {
-        return frequent_mardi;
-    }
-
-    public void setFrequent_mardi(boolean frequent_mardi) {
-        this.frequent_mardi = frequent_mardi;
-    }
-
-    public boolean isFrequent_mercredi() {
-        return frequent_mercredi;
-    }
-
-    public void setFrequent_mercredi(boolean frequent_mercredi) {
-        this.frequent_mercredi = frequent_mercredi;
-    }
-
-    public boolean isFrequent_jeudi() {
-        return frequent_jeudi;
-    }
-
-    public void setFrequent_jeudi(boolean frequent_jeudi) {
-        this.frequent_jeudi = frequent_jeudi;
-    }
-
-    public boolean isFrequent_vendredi() {
-        return frequent_vendredi;
-    }
-
-    public void setFrequent_vendredi(boolean frequent_vendredi) {
-        this.frequent_vendredi = frequent_vendredi;
-    }
-
-    public boolean isFrequent_samedi() {
-        return frequent_samedi;
-    }
-
-    public void setFrequent_samedi(boolean frequent_samedi) {
-        this.frequent_samedi = frequent_samedi;
-    }
-
-    public boolean isFrequent_dimanche() {
-        return frequent_dimanche;
-    }
-
-    public void setFrequent_dimanche(boolean frequent_dimanche) {
-        this.frequent_dimanche = frequent_dimanche;
-    }
-
-   
-
     public List<Voyage> getVoyages() {
         return voyages;
     }
@@ -153,16 +112,64 @@ public class VoyageSchedule   extends SimpleAuditEntity{
         this.voyages = voyages;
     }
 
-    public Agence getAgence() {
-        return agence;
+    public String getHorairesLundi() {
+        return horairesLundi;
     }
 
-    public void setAgence(Agence agence) {
-        this.agence = agence;
+    public void setHorairesLundi(String horairesLundi) {
+        this.horairesLundi = horairesLundi;
+    }
+
+    public String getHorairesMardi() {
+        return horairesMardi;
+    }
+
+    public void setHorairesMardi(String horairesMardi) {
+        this.horairesMardi = horairesMardi;
+    }
+
+    public String getHorairesMercredi() {
+        return horairesMercredi;
+    }
+
+    public void setHorairesMercredi(String horairesMercredi) {
+        this.horairesMercredi = horairesMercredi;
+    }
+
+    public String getHorairesJeudi() {
+        return horairesJeudi;
+    }
+
+    public void setHorairesJeudi(String horairesJeudi) {
+        this.horairesJeudi = horairesJeudi;
+    }
+
+    public String getHorairesVendredi() {
+        return horairesVendredi;
+    }
+
+    public void setHorairesVendredi(String horairesVendredi) {
+        this.horairesVendredi = horairesVendredi;
+    }
+
+    public String getHorairesSamedi() {
+        return horairesSamedi;
+    }
+
+    public void setHorairesSamedi(String horairesSamedi) {
+        this.horairesSamedi = horairesSamedi;
+    }
+
+    public String getHorairesDimanche() {
+        return horairesDimanche;
+    }
+
+    public void setHorairesDimanche(String horairesDimanche) {
+        this.horairesDimanche = horairesDimanche;
     }
 
    
-   
+  
     
     
 }

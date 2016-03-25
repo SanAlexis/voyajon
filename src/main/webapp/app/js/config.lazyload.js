@@ -7,79 +7,57 @@ angular.module('app')
          * value: array of the css js file located
          */
         .constant('JQ_CONFIG', {
-            easyPieChart: ['vendor/jquery/charts/easypiechart/jquery.easy-pie-chart.js'],
-            sparkline: ['vendor/jquery/charts/sparkline/jquery.sparkline.min.js'],
-            plot: ['vendor/jquery/charts/flot/jquery.flot.min.js',
-                'vendor/jquery/charts/flot/jquery.flot.resize.js',
-                'vendor/jquery/charts/flot/jquery.flot.tooltip.min.js',
-                'vendor/jquery/charts/flot/jquery.flot.spline.js',
-                'vendor/jquery/charts/flot/jquery.flot.orderBars.js',
-                'vendor/jquery/charts/flot/jquery.flot.pie.min.js'],
-            slimScroll: ['vendor/jquery/slimscroll/jquery.slimscroll.min.js'],
-            sortable: ['vendor/jquery/sortable/jquery.sortable.js'],
-            nestable: ['vendor/jquery/nestable/jquery.nestable.js',
-                'vendor/jquery/nestable/nestable.css'],
-            filestyle: ['vendor/jquery/file/bootstrap-filestyle.min.js'],
-            slider: ['vendor/jquery/slider/bootstrap-slider.js',
-                'vendor/jquery/slider/slider.css'],
-            chosen: ['vendor/jquery/chosen/chosen.jquery.min.js',
-                'vendor/jquery/chosen/chosen.css'],
-            TouchSpin: ['vendor/jquery/spinner/jquery.bootstrap-touchspin.min.js',
-                'vendor/jquery/spinner/jquery.bootstrap-touchspin.css'],
-            wysiwyg: ['vendor/jquery/wysiwyg/bootstrap-wysiwyg.js',
-                'vendor/jquery/wysiwyg/jquery.hotkeys.js'],
-            dataTable: ['vendor/jquery/datatables/jquery.dataTables.min.js',
-                'vendor/jquery/datatables/dataTables.bootstrap.js',
-                'vendor/jquery/datatables/dataTables.bootstrap.css'],
-            vectorMap: ['vendor/jquery/jvectormap/jquery-jvectormap.min.js',
-                'vendor/jquery/jvectormap/jquery-jvectormap-world-mill-en.js',
-                'vendor/jquery/jvectormap/jquery-jvectormap-us-aea-en.js',
-                'vendor/jquery/jvectormap/jquery-jvectormap.css'],
-            footable: ['vendor/jquery/footable/footable.all.min.js',
-                'vendor/jquery/footable/footable.core.css']
+            moment: ['libs/jquery/moment/moment.js'],
+            fullcalendar: ['libs/jquery/moment/moment.js',
+                'libs/jquery/fullcalendar/dist/fullcalendar.min.js',
+                'libs/jquery/fullcalendar/dist/fullcalendar.css',
+                'libs/jquery/fullcalendar/dist/fullcalendar.theme.css'],
+            daterangepicker: ['libs/jquery/moment/moment.js',
+                'libs/jquery/bootstrap-daterangepicker/daterangepicker.js',
+                'libs/jquery/bootstrap-daterangepicker/daterangepicker-bs3.css']
         }
         )
+        .constant('MODULE_CONFIG', [
+            {
+                name: 'xeditable',
+                files: [
+                    'libs/angular/angular-xeditable/dist/js/xeditable.min.js',
+                    'libs/angular/angular-xeditable/dist/css/xeditable.css'
+                ]
+            },
+            {
+                name: 'smart-table',
+                files: [
+                    'libs/angular/angular-smart-table/dist/smart-table.min.js'
+                ]
+            },
+            {
+                name: 'ui.select',
+                files: [
+                    'libs/angular/angular-ui-select/dist/select.min.js',
+                    'libs/angular/angular-ui-select/dist/select.min.css'
+                ]
+            },
+            {
+                name: 'toaster',
+                files: [
+                    'libs/angular/angularjs-toaster/toaster.js',
+                    'libs/angular/angularjs-toaster/toaster.css'
+                ]
+            },
+            {
+                name: 'ui.calendar',
+                files: ['libs/angular/angular-ui-calendar/src/calendar.js']
+            }
+        ]
+                )
         // oclazyload config
-        .config(['$ocLazyLoadProvider', function($ocLazyLoadProvider) {
+        .config(['$ocLazyLoadProvider', 'MODULE_CONFIG', function ($ocLazyLoadProvider, MODULE_CONFIG) {
                 // We configure ocLazyLoad to use the lib script.js as the async loader
                 $ocLazyLoadProvider.config({
                     debug: false,
-                    events: false,
-                    modules: [
-                        {
-                            name: 'datatables',
-                            files: [
-                                'vendor/jquery/datatables/jquery.dataTables.min.js',
-                                'vendor/jquery/datatables/dataTables.tableTools.min.js',
-                                'vendor/jquery/datatables/dataTables.bootstrap.js',
-                                'vendor/modules/datatables/angular-datatables.bootstrap.js',
-                                'vendor/modules/datatables/angular-datatables.bootstrap.options.js',
-                                'vendor/modules/datatables/angular-datatables.directive.js',
-                                'vendor/modules/datatables/angular-datatables.factory.js',
-                                'vendor/modules/datatables/angular-datatables.js',
-                                'vendor/modules/datatables/angular-datatables.options.js',
-                                'vendor/modules/datatables/angular-datatables.renderer.js',
-                                'vendor/modules/datatables/angular-datatables.util.js',
-                                 'vendor/jquery/datatables/dataTables.bootstrap.css',
-                                'vendor/jquery/datatables/dataTables.tableTools.min.css'
-                            ]
-                        },
-                        {
-                            name: 'ui.select',
-                            files: [
-                                'vendor/modules/angular-ui-select/select.min.js',
-                                'vendor/modules/angular-ui-select/select.min.css'
-                            ]
-                        },
-                       
-                        {
-                            name: 'toaster',
-                            files: [
-                                'vendor/modules/angularjs-toaster/toaster.js',
-                                'vendor/modules/angularjs-toaster/toaster.css'
-                            ]
-                        }
-                    ]
+                    events: true,
+                    modules: MODULE_CONFIG
                 });
             }])
         ;

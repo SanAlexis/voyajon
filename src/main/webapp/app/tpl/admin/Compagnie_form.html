@@ -1,0 +1,123 @@
+<div ng-controller="CompagnieForm">
+    <div class="bg-light lter b-b wrapper-md" >
+        <div class="btn-toolbar pull-right">
+            <div class=" btn-group pull-right ">
+                <button type="button" class="btn btn-default" ng-click=" $state.go('app.table.list', {categorie: categorie});"   tooltip="List">
+                    <i class="fa fa-th-list"></i>  
+                </button>
+            </div>
+        </div>
+        <h1 class="m-n font-thin h3">    {{categorie}} </h1>
+        <small class="text-muted"  translate="form.legend">Fields marked with * are required</small>
+    </div>
+    <!-- Main content -->
+    <div class="wrapper-md"  >
+
+        <div class="row"  ng-show="app.settings.debugmode">
+            <div class="col-lg-12">
+                <pre>{{tsoftitem}}</pre>
+            </div>
+        </div>
+
+        <div class="panel panel-info"> 
+            <div class="panel-body"  >
+                <fieldset>
+                    <tabset justified="false"  type="pills" vertical="false" >
+                        <tab>
+                            <tab-heading  >Compagnie</tab-heading>
+                            <br>
+                            <form      ng-submit="save()"  novalidate="true"
+                                       name="form"   method="POST"    id="form"    class="form-validation form-horizontal"  >
+                                <div class="form-group">
+                                    <label class="col-lg-2 control-label">Nom<span style="color:red">*</span></label>
+                                    <div class="col-lg-6">
+                                        <input type="text" class="form-control"  required=""  ng-model="tsoftitem.libelle">
+
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-lg-2 control-label">Site Web</label>
+                                    <div class="col-lg-6">
+                                        <input type="url" class="form-control" placeholder="http://"  ng-model="tsoftitem.siteweb">
+                                    </div>
+                                </div> 
+                                <div class="form-group ">
+                                    <div  class="col-lg-offset-2  col-lg-10">
+                                        <button type="submit" class="btn btn-primary"    ng-disabled="form.$invalid || form.$pristine"    >
+                                            <i class="fa fa-save"  ng-show="!errorService.waiting">{{'form.save'| translate}}</i>
+                                            <i class="fa fa-spinner faa-spin animated" ng-show="errorService.waiting"></i>
+                                            <span ng-show="errorService.waiting">Loading...</span>
+                                        </button>
+                                        <button   type="button" class="btn btn-default"  ng-click="reset()"  > <i class="glyphicon  glyphicon-remove"></i>{{'form.reset'| translate}}</button>
+                                    </div>
+                                </div>
+
+                            </form>
+
+                        </tab>
+
+                        <tab   disabled="!(tsoftitem.code)"  select="$state.go('app.form.elt.agence')">
+                            <tab-heading> Agences</tab-heading>
+                            <br>
+                            <div ui-view="AgenceListView"></div>
+                        </tab>
+                        <tab   disabled="!(tsoftitem.code)"  select="$state.go('app.form.elt.tarif')">
+                            <tab-heading> Tarifs</tab-heading>
+                            <br>
+                            <div ui-view="TarifListView"></div>
+                        </tab>
+
+                    </tabset>
+                </fieldset>
+
+            </div>
+
+
+
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript" >
+
+    app.controller("CompagnieForm",
+            function CompagnieForm($scope, $http, toaster, $state, ErrorService, $stateParams, CrudService) {
+                $scope.categorie = 'Compagnie';
+                $scope.errorService = ErrorService;
+                $scope.errorService.clear();
+
+                if ($stateParams.id === -1) {
+                    $scope.tsoftitem = {};
+                } else {
+                    CrudService.get({categorie: $scope.categorie, id: $stateParams.id}, function (data) {
+                        $scope.tsoftitem = data;
+                    });
+                }
+
+                $scope.master = angular.copy($scope.tsoftitem);
+
+                $scope.reset = function () {
+                    $scope.tsoftitem = angular.copy($scope.master);
+                    $scope.form.$setPristine();
+                };
+
+
+                $scope.save = function () {
+                    $scope.errorService.setwaiting();
+                    CrudService.save({categorie: $scope.categorie}, $scope.tsoftitem,
+                            function (data) {
+                                toaster.pop("success", "Success", "Operation Effectuée avec Succès");
+                                $scope.errorService.setSucces();
+                                $scope.tsoftitem = data;
+                            });
+                };
+
+
+
+
+
+            });
+</script>
+
+

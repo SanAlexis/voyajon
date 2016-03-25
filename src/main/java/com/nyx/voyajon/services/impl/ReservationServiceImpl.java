@@ -15,14 +15,13 @@ import com.nyx.voyajon.entities.ReservationMode;
 import com.nyx.voyajon.entities.Voyage;
 import com.nyx.voyajon.repositories.PassagerRepository;
 import com.nyx.voyajon.repositories.ReservationRepository;
-import com.nyx.voyajon.repositories.VoyageRepository;
 import com.nyx.voyajon.services.MailService;
 import com.nyx.voyajon.services.ReservationService;
 import com.nyx.voyajon.services.VoyageService;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.HashSet;
+import java.time.LocalTime;
 import java.util.List;
-import java.util.Set;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -89,17 +88,19 @@ public class ReservationServiceImpl implements ReservationService {
         Reservation r = new Reservation();
         String id = null;
         while (true) {
-            id = RandomStringUtils.random(8, false, false);
+            id = RandomStringUtils.random(8, false, true);
             if (!reservationRepository.exists(Integer.parseInt(id))) {
                 break;
             }
         }
         r.setCode(Integer.parseInt(id));
-        passagers.stream().forEach(((p)->{ p.setStatut(statut);}));
+        passagers.stream().forEach(((p)->{ p.setStatut(statut);p.setReservation(r);}));
         r.setPassagers(passagers);
         r.setEnabled(true);
         r.setMode(mode);
         r.setVoyage(voyage);
+        r.setDateReservation(LocalDate.now());
+        r.setHeureReservation(LocalTime.now());
         return reservationRepository.save(r);
     }
 

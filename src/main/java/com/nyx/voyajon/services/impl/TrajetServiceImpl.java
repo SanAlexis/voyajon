@@ -27,9 +27,14 @@ public class TrajetServiceImpl implements TrajetService {
     public Trajet save(Trajet tr) throws Exception {
         tr.setLibelle(tr.getVilleA().getLibelle() + "--" + tr.getVilleB().getLibelle());
          if(tr.getCode()==null){
+             //nouveau Trajet
             //creation du reverse trajet
             trajetRepository.save(createReverseTrajet(tr));
-        }
+        }else{
+             //mise à jour trajet
+             //@todo
+             
+         }
         return trajetRepository.save(tr);
     }
 

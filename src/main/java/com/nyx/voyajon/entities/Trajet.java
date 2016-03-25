@@ -13,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
+import org.hibernate.annotations.Formula;
 
 /**
  *
@@ -21,7 +22,7 @@ import javax.validation.constraints.NotNull;
 @Entity
 public class Trajet extends SimpleAuditEntity {
 
-    @NotNull
+    @Formula("(select concat(a.libelle,concat('--',b.libelle)) from Trajet t join Ville a on t.villeA_code=a.code join Ville b on t.villeB_code=b.code where t.code=code)")
     private String libelle;
     @ManyToOne
     @NotNull
