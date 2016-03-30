@@ -18,7 +18,7 @@
                 <div class="form-group">
                     <label>Date<span style="color:red">*</span></label>
                     <div class="input-group w-md">
-                        <input type="text" class="form-control" datepicker-popup="dd/MM/yyyy"  placeholder="dd/MM/yyyy" ng-model="searchVoyage.date"   
+                        <input type="text" class="form-control" datepicker-popup="dd/MM/yyyy"  placeholder="dd/MM/yyyy" ng-model="searchVoyage.date_depart"   
                                min-date="today"  is-open="opened" datepicker-options="dateOptions" 
                                ng-required="true"   show-button-bar="false"  />
                         <span class="input-group-btn">
@@ -44,7 +44,7 @@
                 </div>
 
                 <div class="form-group">
-                    <button class="btn btn-primary" type="submit" >
+                     <button class="btn btn-primary" type="submit"  ng-disabled="searchform1.$invalid || searchform1.$pristine">
                         <i class="fa fa-search"  ng-show="!errorService.waiting">{{'search.mot'| translate }}</i>
                         <i class="fa fa-spinner faa-spin animated" ng-show="errorService.waiting"></i>
                         <span ng-show="errorService.waiting">Loading...</span>
@@ -98,8 +98,8 @@
                                 </i>
                             </button>
 
-                            <button type="button" ng-click="delete(row);" class="btn btn-sm btn-danger">
-                                <i class="fa fa-trash">
+                            <button type="button" ng-click="delete(row);" class="btn btn-sm btn-danger"  tooltip="Annule">
+                                <i class="fa fa-remove">
                                 </i>
                             </button>
                         </td>
@@ -126,6 +126,8 @@
     app.controller("VoyageList",
             function VoyageList($scope, $http, toaster, $state, ErrorService, CrudService) {
                 $scope.categorie = 'Voyage';
+                $scope.errorService = ErrorService;
+                $scope.errorService.clear();
                 $scope.rowCollection = CrudService.query({categorie: $scope.categorie});
                 //  pagination
                 $scope.itemsByPage = 10;
@@ -151,7 +153,15 @@
                     $state.go('app.form.elt', {categorie: $scope.categorie});
                 };
 
-
+                $scope.search = function () {
+                    $scope.errorService.setwaiting();
+                    $http.post('Voyage/search', $scope.searchVoyage)
+                            .success(function (data) {
+                                $scope.errorService.setSucces();
+                                $scope.rowCollection = data;
+                                if(data.length==0)  alert('Aucun Voyage Correspond à cette recherche');
+                            });
+                };
                 $scope.trajets = CrudService.query({categorie: 'Trajet'});
                 $scope.agences = CrudService.query({categorie: 'Agencelist', id: -1});
 

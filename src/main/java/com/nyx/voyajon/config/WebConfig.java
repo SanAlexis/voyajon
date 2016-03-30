@@ -48,10 +48,14 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+        converters.add(jacksonConverter());
+    }
+
+    @Bean
+    public MappingJackson2HttpMessageConverter jacksonConverter() {
         MappingJackson2HttpMessageConverter mjhm = new MappingJackson2HttpMessageConverter();
         mjhm.setObjectMapper(objectMapper());
-        converters.add(mjhm);
-//        converters.add(new FormHttpMessageConverter());
+        return mjhm;
     }
 
     @Override
@@ -70,7 +74,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         ObjectMapper objectMapper = new ObjectMapper();
         // register your module
         SimpleModule simpleModule = new JavaTimeModule();
-        
+
         simpleModule.addDeserializer(LocalDate.class, new LocalDateDeserializer(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
         simpleModule.addDeserializer(LocalTime.class, new LocalTimeDeserializer(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
 

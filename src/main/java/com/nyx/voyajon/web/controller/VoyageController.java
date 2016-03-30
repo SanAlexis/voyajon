@@ -11,6 +11,7 @@ import com.nyx.voyajon.entities.Tarif;
 import com.nyx.voyajon.entities.Voyage;
 import com.nyx.voyajon.entities.VoyageSchedule;
 import com.nyx.voyajon.exception.BusinessException;
+import com.nyx.voyajon.repositories.PassagerRepository;
 import com.nyx.voyajon.repositories.ReservationRepository;
 import com.nyx.voyajon.repositories.TarifRepository;
 import com.nyx.voyajon.repositories.VoyageRepository;
@@ -56,6 +57,8 @@ public class VoyageController {
     @Autowired
     ReservationRepository reservationRepository;
     @Autowired
+    PassagerRepository passagerRepository;
+    @Autowired
     TarifRepository tarifRepository;
 
     @RequestMapping(value = "/Horaire", method = RequestMethod.GET)
@@ -95,15 +98,20 @@ public class VoyageController {
     }
 
     ////VOYAGE
+    
     @RequestMapping(value = "/Voyage/search", method = RequestMethod.POST)
-    public ResponseEntity<JSONObject> searchVoyageClient(@RequestBody SearchVoyage sv) throws Exception {
-        JSONObject result = vss.searchVoyageClient(sv);
-        return new ResponseEntity<>(result, HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "/Voyage", method = RequestMethod.GET)
-    public ResponseEntity<List<Voyage>> listTodayVoyage() throws Exception {
-        return new ResponseEntity<>(voyageRepository.findByDateDepart(LocalDate.now()), HttpStatus.OK);
+    public ResponseEntity<List<Voyage>> searchVoyage(@RequestBody SearchVoyage sv) throws Exception {
+        if (sv.getAgence() != null && sv.getTrajet() != null) {
+            return new ResponseEntity<>(voyageRepository.findByDateDepartAndTrajetAndAgence(sv.getDate_depart(), sv.getTrajet(), sv.getAgence()), HttpStatus.OK);
+        } else {
+           if (sv.getAgence()!=null){
+               return new ResponseEntity<>(voyageRepository.findByDateDepartAndAgence(sv.getDate_depart(),sv.getAgence()), HttpStatus.OK);
+           }
+           if (sv.getTrajet()!=null){
+                return new ResponseEntity<>(voyageRepository.findByDateDepartAndTrajet(sv.getDate_depart(),sv.getTrajet()), HttpStatus.OK);
+           }
+           return new ResponseEntity<>(voyageRepository.findByDateDepart(sv.getDate_depart()), HttpStatus.OK);
+        }
     }
 
     @RequestMapping(value = "/VoyageCalendar", method = RequestMethod.GET)
@@ -113,9 +121,24 @@ public class VoyageController {
         return new ResponseEntity<>(vss.findVoyageCalendar(date_debut, date_fin), HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/Voyage/{id}", method = RequestMethod.GET)
+    public ResponseEntity<Voyage> findVoyage(@PathVariable Integer id) throws Exception {
+        return new ResponseEntity<>(voyageRepository.findOne(id), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/Voyage", method = RequestMethod.GET)
+    public ResponseEntity<List<Voyage>> listTodayVoyage() throws Exception {
+        return new ResponseEntity<>(voyageRepository.findByDateDepart(LocalDate.now()), HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/Voyage", method = RequestMethod.POST)
     public ResponseEntity<Voyage> saveVoyage(@RequestBody Voyage v) throws Exception {
         return new ResponseEntity<>(voyageRepository.save(v), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/Passagerlist/{id}", method = RequestMethod.GET)
+    public ResponseEntity<List<Passager>> listPassagerVoyage(@PathVariable Integer id) {
+        return new ResponseEntity<>(passagerRepository.findByReservationVoyage(voyageRepository.findOne(id)), HttpStatus.OK);
     }
 
     ////RESERVATION
@@ -135,25 +158,15 @@ public class VoyageController {
     }
 
     @RequestMapping(value = "/TakeResa/{id}/{places}", method = RequestMethod.GET)
-    public void prendreReservation(@PathVariable(value = "id") Integer idvoyage, @PathVariable(value = "places") Byte nombre_places, HttpSession session) throws Exception {
-        Reservation resa_deja_faite = (Reservation) session.getAttribute("resa_faite");
-        if (resa_deja_faite != null) {
-            if (Objects.equals(resa_deja_faite.getVoyage().getCode(), idvoyage)) {
-                throw new BusinessException(" Reservation deja faite pour ce voyage dans votre session");
-            }
-            if (resa_deja_faite.getVoyage().getDateDepart().isEqual(voyageRepository.findOne(idvoyage).getDateDepart())) {
-                throw new BusinessException(" Reservation deja faite pour un voyage de la même date dans votre session");
-            }
-        }
+    public void prendreReservation(@PathVariable(value = "id") Integer idvoyage, @PathVariable(value = "places") Byte nombre_places) throws Exception {
         if (!vss.checkReservationDisponible(voyageRepository.findOne(idvoyage), nombre_places)) {
             throw new BusinessException("Plus de places disponibles pour ce voyage");
         }
     }
 
     @RequestMapping(value = "/TakeResa/{id}", method = RequestMethod.POST)
-    public Reservation prendreReservation(@PathVariable(value = "id") Integer idvoyage, @RequestBody List<Passager> passagers, HttpSession session) throws Exception {
+    public Reservation prendreReservation(@PathVariable(value = "id") Integer idvoyage, @RequestBody List<Passager> passagers) throws Exception {
         Reservation r = reservationservice.prendreReservation(voyageRepository.findOne(idvoyage), passagers);
-        session.setAttribute("resa_faite", r);
         return r;
     }
 
@@ -161,12 +174,14 @@ public class VoyageController {
         return reservationservice.acheterTicket(voyageRepository.findOne(idvoyage), passagers);
     }
 
-    public void annulerReservation(@PathVariable(value = "id") Integer idresa) throws Exception {
-
+    @RequestMapping(value = "/CancelResa/{id}", method = RequestMethod.GET)
+    public void annulerReservation(@PathVariable Integer id) throws Exception {
+        reservationservice.annulerReservation(reservationRepository.findOne(id));
     }
 
-    public void confirmerReservation(@PathVariable(value = "id") Integer idresa) throws Exception {
-
+    @RequestMapping(value = "/ConfirmResa/{id}", method = RequestMethod.GET)
+    public void confirmerReservation(@PathVariable Integer id) throws Exception {
+        reservationservice.confirmerReservation(reservationRepository.findOne(id));
     }
 
 }

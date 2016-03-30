@@ -1,0 +1,133 @@
+<div class="box-body  table-responsive"  ng-controller="PassagerList">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <form class="form-inline">
+                <label>Show</label>
+                <select class="form-control" ng-model="itemsByPage">
+                    <option value="5">5</option>
+                    <option value="10">10</option>
+                    <option  value="25">25</option>
+                    <option value="50">50</option>
+                    <option  value="100">100</option>
+                </select>
+            </form>
+        </div>
+        <div class="panel-body table-responsive">
+            <table class="table table-striped table-bordered table-hover"  st-safe-src="rowCollection"  st-table="displayedCollection">
+                <thead>
+                    <tr>
+                        <th st-sort="nom_prenom">Nom</th>
+                        <th st-sort="telephone">Telephone</th>
+                        <th st-sort="email">Email</th>
+                        <th st-sort="numero_cni">Num CNI</th>
+                        <th >ID Reservation</th>
+                        <th >Statut</th>
+                        <th> 
+                <form class="form-inline" role="form">
+                    
+                    <div class="input-group">
+                        <input type="number" class="form-control" ng-model="places"  required="" min="1"  max="6">
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-primary" ng-click="reserver();"   >
+                                Reserver
+                            </button>
+                        </span>
+                    </div>
+                </form>
+
+                </th>
+                </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="row in displayedCollection">
+                        <td>{{row.nom_prenom}}</td>
+                        <td>{{row.telephone}}</td>
+                        <td>{{row.email}}</td>
+                        <td>{{row.numero_cni}}</td>
+                        <td>{{row.reservation.code}}</td>
+                        <td>{{row.statut}}</td>
+                        <td>
+                            <button type="button" ng-click="edit(row);" class="btn btn-sm btn-default"  tooltip="Confirmer">
+                                <i class="fa fa-check">
+                                </i>
+                            </button>
+
+                            <button type="button" ng-click="delete(row);" class="btn btn-sm btn-danger" tooltip="Annuler">
+                                <i class="fa fa-remove">
+                                </i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td   class="text-center">
+                            <div st-pagination="" st-items-by-page="itemsByPage"  class="no-margin"></div>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+
+        </div>
+
+    </div>
+</div>
+
+<script type="text/javascript" >
+
+    app.controller("PassagerList",
+            function PassagerList($scope, $http, toaster, $state, $stateParams, $modal, $log, CrudService) {
+                $scope.categorie = 'Passager';
+                $scope.rowCollection = CrudService.query({categorie: $scope.categorie + 'list', id: $stateParams.id});
+
+                $scope.itemsByPage = 10;
+                $scope.places = 1;
+
+                $scope.delete = function (row) {
+
+                };
+
+                $scope.edit = function (row) {
+
+                };
+                $scope.add = function () {
+
+                };
+
+
+                $scope.reserver = function () {
+                    $http.get('TakeResa/' + $stateParams.id + '/' + $scope.places)
+                            .success(function (data) {
+
+                                var modalInstance = $modal.open({
+                                    templateUrl: 'tpl/admin/Passager_form.html',
+                                    controller: 'PassagerForm',
+                                    size: 'lg',
+                                    resolve: {
+                                        idvoyage: function () {
+                                            return $stateParams.id;
+                                        },
+                                        nbreplaces: function () {
+                                            return $scope.places;
+                                        }
+                                    }
+                                });
+
+                                modalInstance.result.then(function () {
+                                    $scope.rowCollection = CrudService.query({categorie: $scope.categorie + 'list', id: $stateParams.id});
+                                    $log.info('Modal closed at: ' + new Date());
+                                }, function () {
+                                    $log.info('Modal dismissed at: ' + new Date());
+                                });
+
+                            }).error(function (data) {
+                        toaster.pop("error", "Error", data);
+                    });
+
+
+                };
+
+            });
+
+
+</script>

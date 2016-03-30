@@ -202,11 +202,15 @@
             places: 1,
             date_depart: new Date()
         };
-        $scope.trajets = CrudService.query({categorie: 'Trajet'});
-        $scope.compagnies = CrudService.query({categorie: 'Compagnie'});
+
+        $http.get('client/Voyage/search')
+                .success(function (data) {
+                    $scope.trajets = data.trajets;
+                    $scope.compagnies =data.compagnies;
+                });
         $scope.search = function () {
             $scope.errorService.setwaiting();
-            $http.post('Voyage/search', $scope.searchVoyage)
+            $http.post('client/Voyage/search', $scope.searchVoyage)
                     .success(function (data) {
                         $scope.errorService.setSucces();
                         $scope.searchOk = true;
@@ -215,7 +219,7 @@
         };
 
         $scope.reserver = function (idvoyage, nbreplaces) {
-            $http.get('TakeResa/' + idvoyage + '/' + nbreplaces)
+            $http.get('client/TakeResa/' + idvoyage + '/' + nbreplaces)
                     .success(function (data) {
 
                         var modalInstance = $modal.open({
@@ -248,38 +252,4 @@
     })
             ;
 
-    app.controller("PassagerForm",
-            function PassagerForm($scope, $modalInstance, toaster, ErrorService, CrudService, idvoyage, nbreplaces) {
-
-                $scope.errorService = ErrorService;
-                $scope.errorService.clear();
-
-                $scope.passagers = [];
-                for (var i = 0; i < nbreplaces; i++) {
-                    $scope.passagers.push({});
-                }
-                $scope.isFormMode=true;
-
-                $scope.save = function () {
-                    $scope.errorService.setwaiting();
-                    CrudService.save({categorie: 'TakeResa', id: idvoyage}, $scope.passagers,
-                            function (data) {
-                                toaster.pop("success", "Success", "Reservation Effectuée avec Succès");
-                                $scope.errorService.setSucces();
-                                $modalInstance.close();
-                            },
-                            function (error) {
-                                toaster.pop("error", "Error", error);
-                                $scope.errorService.clear();
-                                $modalInstance.close();
-                            });
-                };
-
-                $scope.closemodal = function () {
-                    $modalInstance.dismiss('cancel');
-                };
-
-
-
-            });
 </script>

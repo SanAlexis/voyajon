@@ -52,9 +52,7 @@ public class VoyageSchedule   extends SimpleAuditEntity{
     @OneToMany(mappedBy = "voyageSchedule",cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Voyage> voyages=new ArrayList();
-//    @OneToMany(mappedBy = "schedule",cascade = CascadeType.ALL)
-//    @JsonIgnore
-//    private List<VoyageHoraire> horaires=new ArrayList();
+
 
     public Trajet getTrajet() {
         return trajet;

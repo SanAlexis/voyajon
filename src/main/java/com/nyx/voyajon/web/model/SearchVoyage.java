@@ -5,6 +5,7 @@
  */
 package com.nyx.voyajon.web.model;
 
+import com.nyx.voyajon.entities.Agence;
 import com.nyx.voyajon.entities.Compagnie;
 import com.nyx.voyajon.entities.Trajet;
 import java.io.Serializable;
@@ -20,6 +21,7 @@ public class SearchVoyage implements Serializable{
     @NotNull
     private Trajet trajet;
     private Compagnie compagnie;
+    private Agence agence;
     @NotNull
     private LocalDate date_depart;
     private boolean retour;
@@ -28,6 +30,14 @@ public class SearchVoyage implements Serializable{
     private Byte places;
 
     public SearchVoyage() {
+    }
+
+    public Agence getAgence() {
+        return agence;
+    }
+
+    public void setAgence(Agence agence) {
+        this.agence = agence;
     }
     
     

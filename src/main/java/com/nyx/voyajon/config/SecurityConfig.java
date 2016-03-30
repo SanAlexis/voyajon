@@ -78,38 +78,41 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         "/app/js/**",
                         "/app/l10n/**",
                         "/app/tpl/**",
-                        "/app/vendor/**",
+                        "/app/libs/**",
+                        "/app/landing.html",
                         "/app/index.html");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
-                .authenticationProvider(authenticationProvider())
-                .exceptionHandling()
-                .authenticationEntryPoint(authenticationEntryPoint)
-                .and()
-                .formLogin()
-                .permitAll()
-                .loginProcessingUrl("/app/connect")
-                .usernameParameter("username")
-                .passwordParameter("password")
-                .successHandler(authSuccessHandler)
-                .failureHandler(authFailureHandler)
-                .and()
-                .logout()
-                .logoutUrl("/app/signout").invalidateHttpSession(true)
-                .permitAll()
-                .logoutSuccessHandler(logoutSuccessHandler)
-                .and()
-                .sessionManagement()
-                .maximumSessions(1);
-
         http
-                .authorizeRequests() 
-                .antMatchers(HttpMethod.POST, "/app/forgotpassword").permitAll()
-                .antMatchers(HttpMethod.POST, "/app/changepasswordexp").permitAll()
-                .anyRequest().permitAll();
+                        .authenticationProvider(authenticationProvider())
+                        .exceptionHandling()
+                        .authenticationEntryPoint(authenticationEntryPoint)
+                .and()
+                        .formLogin()
+                        .loginProcessingUrl("/app/connect")
+                        .usernameParameter("username")
+                        .passwordParameter("password")
+                        .successHandler(authSuccessHandler)
+                        .failureHandler(authFailureHandler)
+                        .permitAll()
+                .and()
+                        .logout()
+                        .logoutUrl("/app/signout").invalidateHttpSession(true)
+                        .logoutSuccessHandler(logoutSuccessHandler)
+                         .permitAll()
+                .and()
+                        .csrf().disable()
+                        .authorizeRequests() 
+                        .antMatchers("/app/client/**").permitAll()
+                        .antMatchers("/app/init").permitAll()
+                         .antMatchers(HttpMethod.POST, "/app/forgotpassword").permitAll()
+                         .antMatchers(HttpMethod.POST, "/app/changepasswordexp").permitAll()
+                         .anyRequest().authenticated()
+                .and()
+                        .sessionManagement()
+                        .maximumSessions(1);
     }
     
 

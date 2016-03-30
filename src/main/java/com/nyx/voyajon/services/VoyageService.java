@@ -13,7 +13,6 @@ import com.nyx.voyajon.web.model.VoyageScheduleDTO;
 import java.time.LocalDate;
 import java.util.List;
 import org.json.simple.JSONObject;
-import org.springframework.data.repository.query.Param;
 
 /**
  *

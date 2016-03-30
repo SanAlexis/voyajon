@@ -2,6 +2,7 @@ package com.nyx.voyajon.web.controller;
 
 import com.nyx.voyajon.entities.security.User;
 import com.nyx.voyajon.services.UserService;
+import com.nyx.voyajon.web.model.UserDTO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
@@ -12,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import static org.springframework.http.HttpStatus.OK;
 import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping(value = "/app")
@@ -32,10 +33,9 @@ public class PasswordController {
 
     @RequestMapping(value = "/changepassword", method = RequestMethod.POST)
     public ResponseEntity<String> changepassword(
-            @RequestParam String oldpassword,
-            @RequestParam String newpassword) {
+            @RequestBody  UserDTO udto){
         User principal = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return changepwd(oldpassword, newpassword, principal, 6);
+        return changepwd(udto.getOldpassword(), udto.getNewpassword(), principal, 6);
     }
 
     private ResponseEntity<String> changepwd(String oldpassword, String newpassword,

@@ -6,25 +6,25 @@
 
 
 angular.module('tsoftApp.services', [])
-        .service('ErrorService', function() {
+        .service('ErrorService', function () {
             return {
                 errorMessage: null,
                 succesMessage: null,
                 waiting: null,
-                setwaiting: function() {
+                setwaiting: function () {
                     this.waiting = "Waiting";
                 },
-                setError: function(msg) {
+                setError: function (msg) {
                     this.errorMessage = msg;
                     this.succesMessage = null;
                     this.waiting = null;
                 },
-                setSucces: function() {
+                setSucces: function () {
                     this.errorMessage = null;
                     this.succesMessage = "Success";
                     this.waiting = null;
                 },
-                clear: function() {
+                clear: function () {
                     this.errorMessage = null;
                     this.succesMessage = null;
                     this.waiting = null;
@@ -32,38 +32,19 @@ angular.module('tsoftApp.services', [])
             };
         })
 // register the interceptor as a service, intercepts ALL angular ajax http calls
-        .factory('errorHttpInterceptor', ['$q', 'ErrorService','$rootScope',
-            function($q, ErrorService,$rootScope) {
+        .factory('errorHttpInterceptor', ['$q', 'ErrorService', '$rootScope',
+            function ($q, ErrorService, $rootScope) {
 
                 return {
-//                    request: function(config) {
-//                        console.log('Request made with ', config);
-//                        return config;
-//// If an error, not allowed, or my custom condition,
-//// return $q.reject('Not allowed');
-//                    },
-//                    requestError: function(rejection) {
-//                        console.log('Request error due to ', rejection);
-//// Continue to ensure that the next promise chain
-//// sees an error
-//                        return $q.reject(rejection);
-//// Or handled successfully?
-//// return someValue
-//                    },
-//                    response: function(response) {
-//                        console.log('Response from server', response);
-//// Return a promise
-//                        return response || $q.when(response);
-//                    },
-                    responseError: function(rejection) {
+                    responseError: function (rejection) {
                         console.log('Error in response ', rejection);
-                         if (rejection.status === 401) {
+                        if (rejection.status === 401) {
                             $rootScope.$broadcast('event:loginRequired');
-                            
+
                         }
-                        if (rejection.status >= 400 && rejection.status < 510) {
+                        if (rejection.status >= 402 && rejection.status < 510) {
                             ErrorService.setError('Server was unable to find what you were looking for... Sorry!!');
-                           console.log(rejection);
+                            console.log(rejection);
                             alert(rejection.data);
                         }
 
@@ -72,7 +53,7 @@ angular.module('tsoftApp.services', [])
                 };
             }])
 
-        .config(['$httpProvider', function($httpProvider) {
+        .config(['$httpProvider', function ($httpProvider) {
                 $httpProvider.interceptors.push('errorHttpInterceptor');
             }]);
 

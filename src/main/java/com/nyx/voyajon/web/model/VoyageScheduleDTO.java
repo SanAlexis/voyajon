@@ -9,7 +9,6 @@ import com.nyx.voyajon.entities.Agence;
 import com.nyx.voyajon.entities.Trajet;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,13 +24,13 @@ public class VoyageScheduleDTO implements Serializable {
     private LocalDate date_fin;
     private boolean vip;
     private boolean classic;
-    private List<LocalTime> horairesLundi=new ArrayList();
-    private List<LocalTime> horairesMardi=new ArrayList();
-    private List<LocalTime> horairesMercredi=new ArrayList();
-    private List<LocalTime> horairesJeudi=new ArrayList();
-    private List<LocalTime> horairesVendredi=new ArrayList();
-    private List<LocalTime> horairesSamedi=new ArrayList();
-    private List<LocalTime> horairesDimanche=new ArrayList();
+    private List<String> horairesLundi=new ArrayList();
+    private List<String> horairesMardi=new ArrayList();
+    private List<String> horairesMercredi=new ArrayList();
+    private List<String> horairesJeudi=new ArrayList();
+    private List<String> horairesVendredi=new ArrayList();
+    private List<String> horairesSamedi=new ArrayList();
+    private List<String> horairesDimanche=new ArrayList();
     
 
     public Trajet getTrajet() {
@@ -82,59 +81,59 @@ public class VoyageScheduleDTO implements Serializable {
         this.classic = classic;
     }
 
-    public List<LocalTime> getHorairesLundi() {
+    public List<String> getHorairesLundi() {
         return horairesLundi;
     }
 
-    public void setHorairesLundi(List<LocalTime> horairesLundi) {
+    public void setHorairesLundi(List<String> horairesLundi) {
         this.horairesLundi = horairesLundi;
     }
 
-    public List<LocalTime> getHorairesMardi() {
+    public List<String> getHorairesMardi() {
         return horairesMardi;
     }
 
-    public void setHorairesMardi(List<LocalTime> horairesMardi) {
+    public void setHorairesMardi(List<String> horairesMardi) {
         this.horairesMardi = horairesMardi;
     }
 
-    public List<LocalTime> getHorairesMercredi() {
+    public List<String> getHorairesMercredi() {
         return horairesMercredi;
     }
 
-    public void setHorairesMercredi(List<LocalTime> horairesMercredi) {
+    public void setHorairesMercredi(List<String> horairesMercredi) {
         this.horairesMercredi = horairesMercredi;
     }
 
-    public List<LocalTime> getHorairesJeudi() {
+    public List<String> getHorairesJeudi() {
         return horairesJeudi;
     }
 
-    public void setHorairesJeudi(List<LocalTime> horairesJeudi) {
+    public void setHorairesJeudi(List<String> horairesJeudi) {
         this.horairesJeudi = horairesJeudi;
     }
 
-    public List<LocalTime> getHorairesVendredi() {
+    public List<String> getHorairesVendredi() {
         return horairesVendredi;
     }
 
-    public void setHorairesVendredi(List<LocalTime> horairesVendredi) {
+    public void setHorairesVendredi(List<String> horairesVendredi) {
         this.horairesVendredi = horairesVendredi;
     }
 
-    public List<LocalTime> getHorairesSamedi() {
+    public List<String> getHorairesSamedi() {
         return horairesSamedi;
     }
 
-    public void setHorairesSamedi(List<LocalTime> horairesSamedi) {
+    public void setHorairesSamedi(List<String> horairesSamedi) {
         this.horairesSamedi = horairesSamedi;
     }
 
-    public List<LocalTime> getHorairesDimanche() {
+    public List<String> getHorairesDimanche() {
         return horairesDimanche;
     }
 
-    public void setHorairesDimanche(List<LocalTime> horairesDimanche) {
+    public void setHorairesDimanche(List<String> horairesDimanche) {
         this.horairesDimanche = horairesDimanche;
     }
     

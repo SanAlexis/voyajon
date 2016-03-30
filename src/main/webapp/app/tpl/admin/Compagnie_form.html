@@ -86,8 +86,7 @@
                 $scope.categorie = 'Compagnie';
                 $scope.errorService = ErrorService;
                 $scope.errorService.clear();
-
-                if ($stateParams.id === -1) {
+                if ($stateParams.id==-1) {
                     $scope.tsoftitem = {};
                 } else {
                     CrudService.get({categorie: $scope.categorie, id: $stateParams.id}, function (data) {

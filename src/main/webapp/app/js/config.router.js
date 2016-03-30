@@ -16,16 +16,6 @@ angular.module('app')
                 $state.go('access.signin');
             });
         })
-        .run(function ($rootScope, $state, $http) {
-            $rootScope.$on("$stateChangeStart", function (event, toState, toParams, fromState, fromParams) {
-//                if (toState.authenticate) {
-//                    $http.get('login')
-//                            .success(function (response) {
-//                                $rootScope.username = response.data;
-//                            });
-//                }
-            });
-        })
 
         .config(
                 ['$stateProvider', '$urlRouterProvider', 'JQ_CONFIG', 'MODULE_CONFIG',
@@ -40,16 +30,7 @@ angular.module('app')
                                     url: '/client',
                                     templateUrl: 'tpl/client/app.html',
                                     authenticate: false,
-                                    resolve: {
-                                        deps: ['$ocLazyLoad',
-                                            function ($ocLazyLoad) {
-                                                return $ocLazyLoad.load('toaster').
-                                                        then(function () {
-                                                            return $ocLazyLoad.load(['js/controllers/app.js']);
-                                                        }
-                                                        );
-                                            }]
-                                    }
+                                    resolve: load('toaster')
                                 })
                                 .state('client.home', {
                                     url: '/home',
@@ -57,7 +38,8 @@ angular.module('app')
                                 })
                                 .state('client.resa', {
                                     url: '/reservation',
-                                    templateUrl: 'tpl/client/reservation.html'
+                                    templateUrl: 'tpl/client/reservation.html',
+                                    resolve: load('js/controllers/passager.js')
                                 })
                                 .state('client.feedback', {
                                     url: '/feedback',
@@ -78,7 +60,7 @@ angular.module('app')
 
                                 .state('app.home', {
                                     url: '/home',
-                                    templateUrl: 'tpl/blank.html',
+                                    templateUrl: 'tpl/admin/blank.html',
                                     authenticate: true
                                 })
                                 // fullCalendar
@@ -133,6 +115,14 @@ angular.module('app')
                                     },
                                     resolve: load('smart-table')
                                 })
+                                .state('app.form.elt.passager', {
+                                    views: {
+                                        "PassagerListView": {
+                                            templateUrl: 'tpl/admin/Passager_list.html'
+                                        }
+                                    },
+                                    resolve: load(['smart-table', 'js/controllers/passager.js'])
+                                })
 
                                 // pages
                                 .state('app.docs', {
@@ -142,7 +132,7 @@ angular.module('app')
                                 })
                                 .state('app.changepwd', {
                                     url: '/changepwd',
-                                    templateUrl: 'tpl/page_changepwd.html',
+                                    templateUrl: 'tpl/admin/page_changepwd.html',
                                     authenticate: true,
                                     resolve: {
                                         deps: ['uiLoad',
@@ -153,40 +143,28 @@ angular.module('app')
                                 })
 
                                 // others
-                                .state('lockme', {
-                                    url: '/lockme',
-                                    templateUrl: 'tpl/page_lockme.html'
-                                })
+                               
                                 .state('access', {
                                     url: '/access',
                                     template: '<div ui-view class="fade-in-right-big smooth"></div>',
                                     authenticate: false,
-                                    resolve: {
-                                        deps: ['$ocLazyLoad',
-                                            function ($ocLazyLoad) {
-                                                return $ocLazyLoad.load('toaster').
-                                                        then(function () {
-                                                            return $ocLazyLoad.load('js/controllers/user.js');
-                                                        }
-                                                        );
-                                            }]
-                                    }
+                                    resolve: load(['toaster', 'js/controllers/user.js'])
                                 })
                                 .state('access.signin', {
                                     url: '/signin',
-                                    templateUrl: 'tpl/page_signin.html'
+                                    templateUrl: 'tpl/admin/page_signin.html'
                                 })
                                 .state('access.changepwdexp', {
                                     url: '/changepwdexp',
-                                    templateUrl: 'tpl/page_changepwdexp.html'
+                                    templateUrl: 'tpl/admin/page_changepwdexp.html'
                                 })
                                 .state('access.forgotpwd', {
                                     url: '/forgotpwd',
-                                    templateUrl: 'tpl/page_forgotpwd.html'
+                                    templateUrl: 'tpl/admin/page_forgotpwd.html'
                                 })
                                 .state('access.404', {
                                     url: '/404',
-                                    templateUrl: 'tpl/page_404.html',
+                                    templateUrl: 'tpl/admin/page_404.html',
                                     authenticate: true
                                 });
                         ;

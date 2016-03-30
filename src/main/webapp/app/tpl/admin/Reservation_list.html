@@ -7,14 +7,14 @@
 
     <div class="panel panel-default">
         <div class="panel-heading">
-            <form class="form-inline form-validation" role="form"  NAME="searchform1"     ng-submit="search()">
+            <form class="form-inline form-validation" role="form"  NAME="form"  id="form"   ng-submit="search()" >
                 <div class="form-group">
                     <label>ID Reservation<span style="color:red">*</span></label>
                     <input type="number"  required=""  ng-model="coderesa"  class="form-control">
                 </div>
 
                 <div class="form-group">
-                    <button class="btn btn-primary" type="submit" >
+                    <button class="btn btn-primary" type="submit"  ng-disabled="form.$invalid || form.$pristine">
                         <i class="fa fa-search"  ng-show="!errorService.waiting">{{'search.mot'| translate }}</i>
                         <i class="fa fa-spinner faa-spin animated" ng-show="errorService.waiting"></i>
                         <span ng-show="errorService.waiting">Loading...</span>
@@ -39,17 +39,13 @@
                 <thead>
                     <tr>
                         <th st-sort="code">ID</th>
-                        <th st-sort="date_creation">Date Reservation</th>
-                        <th st-sort="nbre_places">Nombre Places</th>
-                        <th st-sort="enabled">Statut</th>
+                        <th st-sort="dateReservation">Date Reservation</th>
+                        <th >Statut</th>
                         <th >Trajet</th>
                         <th >Agence</th>
                         <th >Date Voyage</th>
                         <th> 
-                            <button type="button" class="btn btn-primary" ng-click="add();"  
-                                    tooltip="{{'form.add'| translate}}">
-                                <i class="fa fa-plus"></i>  
-                            </button>
+                            Actions
                         </th>
                     </tr>
                 </thead>
@@ -57,24 +53,24 @@
                     <tr ng-repeat="row in displayedCollection" st-select-row="row">
                         <td>{{row.code}}</td>
                         <td>{{row.dateReservation}},{{row.heureReservation}}</td>
-                        <td>{{row.nbre_places}}</td>
                         <td>{{row.enabled}}</td>
                         <td>{{row.voyage.trajet.libelle}}</td>
                         <td> {{row.voyage.agence.libelle}}</td>
                         <td> {{row.voyage.dateDepart}} , {{row.voyage.heureDepart}} </td>
 
                         <td>
-                            <button type="button" ng-click="edit(row);" class="btn btn-sm btn-default">
-                                <i class="fa fa-edit">
+                            <button type="button" ng-click="confirmer(row.code);" class="btn btn-sm btn-primary"  tooltip="confirmer">
+                                <i class="fa fa-check">
                                 </i>
                             </button>
 
-                            <button type="button" ng-click="delete(row);" class="btn btn-sm btn-danger">
+                            <button type="button" ng-click="annuler(row.code);" class="btn btn-sm btn-danger"   tooltip="Annuler">
                                 <i class="fa fa-remove">
                                 </i>
                             </button>
-                            <button type="button" ng-click="voirPassagers(row.code);" class="btn btn-sm btn-danger">
+                            <button type="button" ng-click="voirPassagers(row.code);" class="btn btn-sm btn-default"   tooltip="Voir Passagers">
                                 <i class="fa fa-male">
+                                    {{row.nbre_places}}
                                 </i>
                             </button>
                         </td>
@@ -107,20 +103,17 @@
 
                 $scope.search = function () {
                     CrudService.get({categorie: $scope.categorie, id: $scope.coderesa}, function (data) {
-                        alert(data.code);
-                        $scope.rowCollection = {};
-                        $scope.rowCollection.push(data);
+                        if (!angular.isUndefined(data.code)) {
+                            $scope.rowCollection = [];
+                            $scope.rowCollection.push(data);
+                        }
+                        else {
+                         alert('Aucune Reservation de code '+$scope.coderesa);
+                        }
                     });
                 };
-                $scope.delete = function (row) {
-
-                };
-                $scope.edit = function (row) {
-                    $state.go('app.form.elt', {categorie: $scope.categorie, id: row.code});
-                };
-                $scope.add = function () {
-                    $state.go('app.form.elt', {categorie: $scope.categorie});
-                };
+               
+               
 
                 $scope.voirPassagers = function (idresa) {
                     var modalInstance = $modal.open({
@@ -148,10 +141,10 @@
 
                 $scope.errorService = ErrorService;
                 $scope.errorService.clear();
-                $scope.isFormMode=false;
+                $scope.isFormMode = false;
 
-                $scope.passagers = CrudService.query({categorie: 'ReservationPassager',id:idresa});
-                
+                $scope.passagers = CrudService.query({categorie: 'ReservationPassager', id: idresa});
+
                 $scope.closemodal = function () {
                     $modalInstance.dismiss('cancel');
                 };

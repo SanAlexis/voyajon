@@ -45,13 +45,15 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public Reservation prendreReservation(Voyage v, List<Passager> passagers) throws Exception {
-        if(!voyageService.checkReservationDisponible(v,Byte.valueOf( passagers.size()+""))) throw new BusinessException("Reservation Impossible ");
-       return completeReservation(v, passagers, PassagerStatut.RESERVE, ReservationMode.MOBILE);
+        if (!voyageService.checkReservationDisponible(v, Byte.valueOf(passagers.size() + ""))) {
+            throw new BusinessException("Reservation Impossible ");
+        }
+        return completeReservation(v, passagers, PassagerStatut.RESERVE, ReservationMode.MOBILE);
     }
 
     @Override
     public Reservation acheterTicket(Voyage v, List<Passager> passagers) throws Exception {
-         return completeReservation(v, passagers, PassagerStatut.CONFIRME, ReservationMode.WEB);
+        return completeReservation(v, passagers, PassagerStatut.CONFIRME, ReservationMode.WEB);
     }
 
     @Override
@@ -61,6 +63,21 @@ public class ReservationServiceImpl implements ReservationService {
         List<Passager> passagers = v.getPassagers();
         passagers.forEach((p) -> {
             p.setStatut(ANNULE);
+//            mailservice.sendEmail(null, new String {p.getEmail()}, null, null, null);
+        });
+        reservationRepository.save(v);
+        passagerRepository.save(passagers);
+
+        return v;
+    }
+
+    @Override
+    @Transactional
+    public Reservation confirmerReservation(Reservation v) throws Exception {
+        v.setEnabled(true);
+        List<Passager> passagers = v.getPassagers();
+        passagers.forEach((p) -> {
+            p.setStatut(CONFIRME);
 //            mailservice.sendEmail(null, new String {p.getEmail()}, null, null, null);
         });
         reservationRepository.save(v);
@@ -94,7 +111,10 @@ public class ReservationServiceImpl implements ReservationService {
             }
         }
         r.setCode(Integer.parseInt(id));
-        passagers.stream().forEach(((p)->{ p.setStatut(statut);p.setReservation(r);}));
+        passagers.stream().forEach(((p) -> {
+            p.setStatut(statut);
+            p.setReservation(r);
+        }));
         r.setPassagers(passagers);
         r.setEnabled(true);
         r.setMode(mode);
@@ -106,11 +126,10 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public void confirmerPassager(List<Passager> passagers) throws Exception {
-        passagers.stream().forEach(((p)->{ p.setStatut(CONFIRME);}));
+        passagers.stream().forEach(((p) -> {
+            p.setStatut(CONFIRME);
+        }));
         passagerRepository.save(passagers);
     }
-    
-   
-   
 
 }

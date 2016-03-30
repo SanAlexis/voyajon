@@ -5,6 +5,7 @@
  */
 package com.nyx.voyajon.repositories;
 
+import com.nyx.voyajon.entities.Agence;
 import com.nyx.voyajon.entities.Compagnie;
 import com.nyx.voyajon.entities.Trajet;
 import com.nyx.voyajon.entities.Voyage;
@@ -21,11 +22,15 @@ import org.springframework.data.repository.query.Param;
 public interface VoyageRepository extends JpaRepository<Voyage, Integer> {
 
     public List<Voyage> findByDateDepart(LocalDate date_depart);
-    
+
     @Query("select v from Voyage v where v.dateDepart>=:debut   and v.dateDepart<=:fin")
-    public List<Voyage> findVoyageCalendar(@Param("debut") LocalDate date_debut,@Param("fin") LocalDate date_fin);
+    public List<Voyage> findVoyageCalendar(@Param("debut") LocalDate date_debut, @Param("fin") LocalDate date_fin);
 
     public List<Voyage> findByDateDepartAndTrajet(LocalDate date_depart, Trajet t);
 
     public List<Voyage> findByDateDepartAndTrajetAndAgence_Compagnie(LocalDate date_depart, Trajet t, Compagnie c);
+
+    public List<Voyage> findByDateDepartAndTrajetAndAgence(LocalDate date_depart, Trajet t, Agence a);
+
+    public List<Voyage> findByDateDepartAndAgence(LocalDate date_depart, Agence a);
 }

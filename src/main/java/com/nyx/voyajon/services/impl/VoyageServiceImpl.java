@@ -8,9 +8,9 @@ package com.nyx.voyajon.services.impl;
 import com.nyx.voyajon.entities.Tarif;
 import com.nyx.voyajon.entities.Trajet;
 import com.nyx.voyajon.entities.Voyage;
-import com.nyx.voyajon.entities.VoyageHoraire;
 import com.nyx.voyajon.entities.VoyageSchedule;
 import com.nyx.voyajon.entities.VoyageStatut;
+import com.nyx.voyajon.exception.BusinessException;
 import com.nyx.voyajon.repositories.TarifRepository;
 import com.nyx.voyajon.repositories.VoyageRepository;
 import com.nyx.voyajon.repositories.VoyageScheduleRepository;
@@ -21,14 +21,16 @@ import com.nyx.voyajon.web.model.VoyageCalendar;
 import com.nyx.voyajon.web.model.VoyageScheduleDTO;
 import java.math.BigDecimal;
 import java.time.DayOfWeek;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.time.temporal.TemporalField;
 import java.time.temporal.WeekFields;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -52,6 +54,41 @@ public class VoyageServiceImpl implements VoyageService {
     @Autowired
     TarifRepository tarifRepository;
 
+    public String ListToString(List<String> list) {
+        try {
+            String result = "";
+            result = list.stream().map((s) -> s + ",").reduce(result, String::concat);
+            return result;
+        } catch (Exception e) {
+            return "";
+        }
+
+    }
+
+    public List<String> StringToList(String st) {
+        try {
+            String[] ss = st.split(",");
+            List<String> result = new ArrayList();
+            result.addAll(Arrays.asList(ss));
+            return result;
+        } catch (Exception e) {
+            return new ArrayList();
+        }
+
+    }
+
+    public List<LocalTime> ParseTime(List<String> horairesString) throws Exception {
+        List<LocalTime> times = new ArrayList();
+        try{
+        horairesString.stream().forEach((time) -> {
+            times.add(LocalTime.parse(time, DateTimeFormatter.ISO_TIME));
+        });
+        }catch(DateTimeParseException dte){
+         throw  new BusinessException("Mauvaise Heure "+dte.getParsedString());
+        }
+        return times;
+    }
+
     public VoyageSchedule VoyageSchedulefromDTO(VoyageScheduleDTO vsdto) throws Exception {
         VoyageSchedule vs = new VoyageSchedule();
         vs.setAgence(vsdto.getAgence());
@@ -61,17 +98,14 @@ public class VoyageServiceImpl implements VoyageService {
         vs.setDate_fin(vsdto.getDate_fin());
         vs.setTrajet(vsdto.getTrajet());
 
-        List<VoyageHoraire> vhs = new ArrayList();
+        vs.setHorairesLundi(ListToString(vsdto.getHorairesLundi()));
+        vs.setHorairesMardi(ListToString(vsdto.getHorairesMardi()));
+        vs.setHorairesMercredi(ListToString(vsdto.getHorairesMercredi()));
+        vs.setHorairesJeudi(ListToString(vsdto.getHorairesJeudi()));
+        vs.setHorairesVendredi(ListToString(vsdto.getHorairesVendredi()));
+        vs.setHorairesSamedi(ListToString(vsdto.getHorairesSamedi()));
+        vs.setHorairesDimanche(ListToString(vsdto.getHorairesDimanche()));
 
-        createVoyageHoraire(vsdto.getHorairesLundi(), vhs, vs, DayOfWeek.MONDAY);
-        createVoyageHoraire(vsdto.getHorairesMardi(), vhs, vs, DayOfWeek.TUESDAY);
-        createVoyageHoraire(vsdto.getHorairesMercredi(), vhs, vs, DayOfWeek.WEDNESDAY);
-        createVoyageHoraire(vsdto.getHorairesJeudi(), vhs, vs, DayOfWeek.THURSDAY);
-        createVoyageHoraire(vsdto.getHorairesVendredi(), vhs, vs, DayOfWeek.FRIDAY);
-        createVoyageHoraire(vsdto.getHorairesSamedi(), vhs, vs, DayOfWeek.SATURDAY);
-        createVoyageHoraire(vsdto.getHorairesDimanche(), vhs, vs, DayOfWeek.SUNDAY);
-
-        vs.setHoraires(vhs);
         return vs;
     }
 
@@ -85,86 +119,49 @@ public class VoyageServiceImpl implements VoyageService {
         vsdto.setDate_debut(vs.getDate_debut());
         vsdto.setDate_fin(vs.getDate_fin());
 
-        List<VoyageHoraire> horaires = vs.getHoraires();
-        for (VoyageHoraire vh : horaires) {
-            if (DayOfWeek.MONDAY.equals(vh.getJour())) {
-                vsdto.getHorairesLundi().add(vh.getHeure());
-                continue;
-            }
-            if (DayOfWeek.TUESDAY.equals(vh.getJour())) {
-                vsdto.getHorairesMardi().add(vh.getHeure());
-                continue;
-            }
-            if (DayOfWeek.WEDNESDAY.equals(vh.getJour())) {
-                vsdto.getHorairesMercredi().add(vh.getHeure());
-                continue;
-            }
-            if (DayOfWeek.THURSDAY.equals(vh.getJour())) {
-                vsdto.getHorairesJeudi().add(vh.getHeure());
-                continue;
-            }
-            if (DayOfWeek.FRIDAY.equals(vh.getJour())) {
-                vsdto.getHorairesVendredi().add(vh.getHeure());
-                continue;
-            }
-            if (DayOfWeek.SATURDAY.equals(vh.getJour())) {
-                vsdto.getHorairesSamedi().add(vh.getHeure());
-                continue;
-            }
-            if (DayOfWeek.SUNDAY.equals(vh.getJour())) {
-                vsdto.getHorairesDimanche().add(vh.getHeure());
-            }
-        }
+        vsdto.setHorairesLundi(StringToList(vs.getHorairesLundi()));
+        vsdto.setHorairesMardi(StringToList(vs.getHorairesMardi()));
+        vsdto.setHorairesMercredi(StringToList(vs.getHorairesMercredi()));
+        vsdto.setHorairesJeudi(StringToList(vs.getHorairesJeudi()));
+        vsdto.setHorairesVendredi(StringToList(vs.getHorairesVendredi()));
+        vsdto.setHorairesSamedi(StringToList(vs.getHorairesSamedi()));
+        vsdto.setHorairesDimanche(StringToList(vs.getHorairesDimanche()));
 
         return vsdto;
     }
 
     @Override
-    public void saveVoyageSchedule(VoyageScheduleDTO vsdto) throws Exception {
-        VoyageSchedule vs = VoyageSchedulefromDTO(vsdto);
-        List<Voyage> voyages = createVoyage(vsdto);
-        vs.setVoyages(voyages);
-        voyageScheduleRepository.save(vs);
-    }
-
-    public void createVoyageHoraire(List<LocalTime> heures, List<VoyageHoraire> horaires, VoyageSchedule vs, DayOfWeek j) {
-        for (LocalTime lt : heures) {
-            VoyageHoraire vh = new VoyageHoraire();
-            vh.setHeure(lt);
-            vh.setJour(j);
-            vh.setSchedule(vs);
-            horaires.add(vh);
-        }
-    }
-
-    public List<Voyage> createVoyage(VoyageScheduleDTO vs) throws Exception {
+    public void saveVoyageSchedule(VoyageScheduleDTO vs) throws Exception {
 
         List<Voyage> voyages = new ArrayList();
         if (!vs.getHorairesLundi().isEmpty()) {
-            createVoyage(voyages, vs, DayOfWeek.MONDAY, vs.getHorairesLundi());
+            createVoyage(voyages, vs, DayOfWeek.MONDAY, ParseTime(vs.getHorairesLundi()));
         }
         if (!vs.getHorairesMardi().isEmpty()) {
-            createVoyage(voyages, vs, DayOfWeek.TUESDAY, vs.getHorairesMardi());
+            createVoyage(voyages, vs, DayOfWeek.TUESDAY, ParseTime(vs.getHorairesMardi()));
         }
         if (!vs.getHorairesMercredi().isEmpty()) {
-            createVoyage(voyages, vs, DayOfWeek.WEDNESDAY, vs.getHorairesMercredi());
+            createVoyage(voyages, vs, DayOfWeek.WEDNESDAY, ParseTime(vs.getHorairesMercredi()));
         }
         if (!vs.getHorairesJeudi().isEmpty()) {
-            createVoyage(voyages, vs, DayOfWeek.THURSDAY, vs.getHorairesJeudi());
+            createVoyage(voyages, vs, DayOfWeek.THURSDAY, ParseTime(vs.getHorairesJeudi()));
         }
         if (!vs.getHorairesVendredi().isEmpty()) {
-            createVoyage(voyages, vs, DayOfWeek.FRIDAY, vs.getHorairesVendredi());
+            createVoyage(voyages, vs, DayOfWeek.FRIDAY, ParseTime(vs.getHorairesVendredi()));
         }
         if (!vs.getHorairesSamedi().isEmpty()) {
-            createVoyage(voyages, vs, DayOfWeek.SATURDAY, vs.getHorairesSamedi());
+            createVoyage(voyages, vs, DayOfWeek.SATURDAY, ParseTime(vs.getHorairesSamedi()));
         }
         if (!vs.getHorairesDimanche().isEmpty()) {
-            createVoyage(voyages, vs, DayOfWeek.SUNDAY, vs.getHorairesDimanche());
+            createVoyage(voyages, vs, DayOfWeek.SUNDAY, ParseTime(vs.getHorairesDimanche()));
         }
-        return voyages;
+
+        VoyageSchedule vss = VoyageSchedulefromDTO(vs);
+        vss.setVoyages(voyages);
+        voyageScheduleRepository.save(vss);
     }
 
-    public void createVoyage(List<Voyage> voyages, VoyageScheduleDTO vs, DayOfWeek fromDay, List<LocalTime> heures) {
+    public void createVoyage(List<Voyage> voyages, VoyageScheduleDTO vs, DayOfWeek fromDay, List<LocalTime> heures) throws Exception{
         LocalDate d1 = nextDayFromDate(vs.getDate_debut(), fromDay);
         while (d1.isBefore(vs.getDate_fin())) {
             Tarif tarif = tarifRepository.findByTrajetAndCompagnie(vs.getTrajet(), vs.getAgence().getCompagnie());
@@ -176,7 +173,7 @@ public class VoyageServiceImpl implements VoyageService {
         }
     }
 
-    public void createVoyage(List<Voyage> voyages, VoyageScheduleDTO vs, LocalDate dateDepart, boolean vip, BigDecimal prix, List<LocalTime> heures) {
+    public void createVoyage(List<Voyage> voyages, VoyageScheduleDTO vs, LocalDate dateDepart, boolean vip, BigDecimal prix, List<LocalTime> heures) throws Exception{
         for (LocalTime heureDepart : heures) {
             Voyage v = new Voyage();
             v.setStatut(VoyageStatut.PROGRAMME);

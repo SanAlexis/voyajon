@@ -17,14 +17,15 @@ import java.util.List;
 public interface ReservationService {
 
     public Reservation prendreReservation(Voyage v, List<Passager> passagers) throws Exception;
-    
+
     public Reservation acheterTicket(Voyage v, List<Passager> passagers) throws Exception;
 
     public Reservation annulerReservation(Reservation v) throws Exception;
-    
+
+    public Reservation confirmerReservation(Reservation v) throws Exception;
+
     public void confirmerPassager(List<Passager> passagers) throws Exception;
 
     public void annulerAnciennesReservations() throws Exception;
-
 
 }

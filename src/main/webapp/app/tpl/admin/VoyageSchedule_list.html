@@ -84,10 +84,7 @@
                     var r = confirm("Confirm ?");
                     if (r == true) {
                         CrudService.delete({categorie: $scope.categorie, id: row.code}, function (data) {
-                            var index = $scope.rowCollection.indexOf(row);
-                            if (index !== -1) {
-                                $scope.rowCollection.splice(index, 1);
-                            }
+                            $scope.rowCollection = CrudService.query({categorie: $scope.categorie});
                             toaster.pop("success", "Success", "Suppression Effectuée avec Succès");
                         }, function (error) {
                             toaster.pop("error", "Error", error);
@@ -100,10 +97,10 @@
                     $state.go('app.form.elt', {categorie: $scope.categorie, id: row.code});
                 };
                 $scope.add = function () {
-                    $state.go('app.form.elt', {categorie: $scope.categorie,id:-1});
+                    $state.go('app.form.elt', {categorie: $scope.categorie, id: -1});
                 };
 
 
             });
 
-  </script>
+</script>
