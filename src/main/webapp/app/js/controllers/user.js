@@ -8,20 +8,25 @@ app.controller('UserController', ['$rootScope', '$scope', '$http', '$state', 'to
         $scope.authError = null;
         $scope.login = function () {
             $scope.authError = null;
-            // Try to login
-            $http.post('connect', $scope.user)
-                    .success(function (data) {
+           // Try to login
+            $http({
+                method: 'POST',
+                url: 'connect',
+                data: $.param($scope.user), // pass in data as strings
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'}  // set the headers so angular passing info as form data (not request payload)
+            })
+                    .then(function (data) {
                         $rootScope.username = data.username;
                         $state.go('app.home');
-                    })
-                    .error(function (data) {
+
+                    }, function (data) {
                         console.log(data);
                         $scope.authError = data.message;
                         if (data.code) {
                             $state.go('access.changepwdexp');
                         }
-                    });
 
+                    });
         };
 
         $scope.chgtpwd = function () {
@@ -39,7 +44,7 @@ app.controller('UserController', ['$rootScope', '$scope', '$http', '$state', 'to
             $scope.authError = null;
             $http.post('changepasswordexp', $scope.user)
                     .success(function (data) {
-                       $scope.login();
+                        $scope.login();
                     })
                     .error(function (data) {
                         $scope.authError = data;
@@ -47,9 +52,9 @@ app.controller('UserController', ['$rootScope', '$scope', '$http', '$state', 'to
         };
         $scope.forgotpassword = function () {
             $scope.authError = null;
-             $http.post('forgotpassword', $scope.user)
+            $http.post('forgotpassword', $scope.user)
                     .success(function (data) {
-                       $scope.user.password = $scope.user.username;
+                        $scope.user.password = $scope.user.username;
                         $scope.login();
                         toaster.pop("Succes", "Success", "Nouveau Mot de passe" + $scope.user.username);
                     })

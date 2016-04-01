@@ -38,14 +38,14 @@
                                             <label    class="col-lg-4 control-label">Heure Arrivee
                                             </label> 
                                             <div class="col-lg-8">
-                                                <timepicker ng-model="tsoftitem.heureDepart"  required="" hour-step="1" minute-step="15" show-meridian="false"></timepicker>
+                                                <timepicker ng-model="tsoftitem.heureDepart"  required="" hour-step="1" minute-step="15" show-meridian="false"  show-spinners="false"></timepicker>
                                             </div>
                                         </div>
                                         <div class="form-group"  >
                                             <label    class="col-lg-4 control-label">Heure Arrivee
                                             </label> 
                                             <div class="col-lg-8">
-                                                <timepicker ng-model="tsoftitem.heureArrivee"  required="" hour-step="1" minute-step="15" show-meridian="false"></timepicker>
+                                                <timepicker ng-model="tsoftitem.heureArrivee"  required="" hour-step="1" minute-step="15" show-meridian="false"  show-spinners="false"></timepicker>
                                             </div>
                                         </div>
                                         <div class="form-group"  >
@@ -132,7 +132,7 @@
                                             </label> 
                                             <div class="col-lg-8">
                                                 <select   ng-model="tsoftitem.bus" required=""  class="form-control"
-                                                          ng-options="v as v.libelle  for v in bus track by v.code"   >
+                                                          ng-options="v as v.immatriculation  for v in bus track by v.code"   >
                                                     <option>--</option>
                                                 </select>
                                             </div>
@@ -197,7 +197,7 @@
 <script type="text/javascript" >
 
     app.controller("VoyageForm",
-            function VoyageForm($scope, $http, toaster, $state, ErrorService, $stateParams, CrudService) {
+            function VoyageForm($scope,  toaster,  ErrorService, $stateParams, CrudService) {
                 $scope.categorie = 'Voyage';
                 $scope.errorService = ErrorService;
                 $scope.errorService.clear();

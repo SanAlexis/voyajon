@@ -1,4 +1,20 @@
 {
+    "booking":"Booking",
+    "departure":"Departure",
+    "return":"Return",
+    "route":"Route",
+    "company":"Company",
+    "seats":"Seats",
+    "search":"Search",
+    "oneway":"One Way",
+    "roundtrip":"Round Trip",
+    "mybooking":"My Booking",
+    "phone":"Phone",
+    "name":"Name & Surname",
+    "nodata":"No Data Available",
+    "passenger": "Passenger",
+    "passenger1": "Enter Email or Phone Number for this passenger",
+    "mybooking1": "Enter Email or Phone Number",
     "login": {
         "legend": "Enter yours credentials",
         "username": "Username",
@@ -7,16 +23,7 @@
         "forget": "Forgot password?"
     },
     "search": {
-        "legend": "Search Form and DataTables",
-        "zonerecherche": "Search Area",
-        "zonerecherche1": "Advanced Search",
-        "attribut": "Fields",
-        "operateur": "Operator",
-        "mot": "Search",
-        "value": "Research value",
-        "result": "Research Results",
-        "criteres": "Clauses",
-        "criteresinit": "Init"
+        "legend": "Search Form and DataTables"
     },
     "form": {
         "legend": "(Fields marked with * are required)",
@@ -26,13 +33,7 @@
         "reset": "Cancel",
         "add": "New",
         "del": "Delete",
-        "search": "Search",
-        "refresh": "Refresh",
-        "listbegin": "Begin",
-        "listprevious": "Previous",
-        "listnext": "Next",
-        "listend": "End",
-        "duplicate": "Duplicate"
+        "search": "Search"
     },
     "menu": {
         "deconnexion": "Logout",

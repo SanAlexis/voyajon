@@ -3,36 +3,34 @@
 </div>
 <div class="wrapper-md" >
     <div class="row">
-        <div class="col-sm-12"  ng-show="{{contact!='699999999'}}">
+        <div class="col-sm-12">
             <p>
-                <button  ng-click="$state.go('app.quizz')" class="btn btn-default btn-lg btn-block"><i class="icon-question pull-left"></i> Quizz</button>
+                <button  ng-click="$state.go('client.booking')" class="btn btn-default btn-lg btn-block">
+                    <i class="fa fa-shopping-cart pull-left"></i> {{'booking'| translate }}
+                </button>
             </p>
             <p>
-                <button ng-click="$state.go('app.tombola')" class="btn btn-default  btn-lg btn-block"><i class="icon-tag pull-left"></i>Tombola</button>
-            </p>     
+                <button  ng-click="$state.go('client.mybooking')" class="btn btn-default btn-lg btn-block">
+                    <i class="fa fa-ticket pull-left"></i> {{'mybooking'| translate }}
+                </button>
+            </p>
             <p>
-                <button ng-click="$state.go('app.feedback')" class="btn btn-default  btn-lg btn-block"><i class="icon-like  pull-left"></i>Feedback</button>
-            </p>     
+                <button  ng-click="$state.go('client.feedback')" class="btn btn-default btn-lg btn-block">
+                    <i class="icon-like pull-left"></i> Feedback
+                </button>
+            </p>
+            <p>
+                <button  ng-click="$state.go('client.information')" class="btn btn-default btn-lg btn-block">
+                    <i class="icon-info pull-left"></i> Information
+                </button>
+            </p>
+            <p>
+                <button  ng-click="$state.go('client.service')" class="btn btn-default btn-lg btn-block">
+                    <i class="fa fa-tags pull-left"></i> Service
+                </button>
+            </p>
 
         </div>
-        
-        <div class="col-sm-12"  ng-show="{{contact=='699999999'}}">
-             <p>
-                <button  ng-click="$state.go('app.launchquizz')" class="btn btn-default btn-lg btn-block"><i class="icon-question pull-left"></i> Quizz</button>
-            </p>
-             <p>
-                <button  ng-click="$state.go('app.tombolaadmin')" class="btn btn-default btn-lg btn-block"><i class="icon-tag pull-left"></i> Tombola</button>
-            </p>
-            <p>
-                <button ng-click="$state.go('app.feedbackadmin')" class="btn btn-default  btn-lg btn-block"><i class="glyphicon-stats  pull-left"></i>Statistiques</button>
-            </p>
-            
-        </div>
-        
-       
-        
-             
-
 
     </div>
 </div>

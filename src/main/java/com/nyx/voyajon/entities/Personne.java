@@ -18,7 +18,7 @@ public class Personne   extends SimpleAuditEntity{
     
     @NotNull
     private String nom_prenom;
-    private Integer telephone;
+    private String telephone;
     private String email;
     private Integer numero_cni;
 
@@ -30,13 +30,7 @@ public class Personne   extends SimpleAuditEntity{
         this.nom_prenom = nom_prenom;
     }
 
-    public Integer getTelephone() {
-        return telephone;
-    }
-
-    public void setTelephone(Integer telephone) {
-        this.telephone = telephone;
-    }
+   
 
     public String getEmail() {
         return email;
@@ -44,6 +38,14 @@ public class Personne   extends SimpleAuditEntity{
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getTelephone() {
+        return telephone;
+    }
+
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
     }
 
     public Integer getNumero_cni() {

@@ -16,8 +16,16 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @author eisti
  */
 public interface PassagerRepository extends JpaRepository<Passager, Integer> {
-    
+
     public List<Passager> findByStatut(PassagerStatut statut);
-    
+
     public List<Passager> findByReservationVoyage(Voyage v);
+
+    public List<Passager> findByReservationCodeAndTelephone(Integer code, String telephone);
+
+    public List<Passager> findByReservationCodeAndEmail(Integer code, String email);
+
+    public List<Passager> findByEmailAndStatut(String email,PassagerStatut statut);
+
+    public List<Passager> findByTelephoneAndStatut(String telphone,PassagerStatut statut);
 }

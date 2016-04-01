@@ -36,10 +36,14 @@ angular.module('app')
                                     url: '/home',
                                     templateUrl: 'tpl/client/home.html'
                                 })
-                                .state('client.resa', {
-                                    url: '/reservation',
-                                    templateUrl: 'tpl/client/reservation.html',
+                                .state('client.booking', {
+                                    url: '/booking',
+                                    templateUrl: 'tpl/client/booking.html',
                                     resolve: load('js/controllers/passager.js')
+                                })
+                                .state('client.mybooking', {
+                                    url: '/mybooking',
+                                    templateUrl: 'tpl/client/mybooking.html'
                                 })
                                 .state('client.feedback', {
                                     url: '/feedback',

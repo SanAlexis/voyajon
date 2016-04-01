@@ -53,58 +53,12 @@
         </div>
         <!-- / user -->
 
-        <!-- list -->
-        <ul class="nav" >
-            <li class="hidden-folded padder m-t m-b-sm text-muted text-xs">
-                <span >Menu</span>
-            </li>
-
-
-            <li ui-sref-active="active">
-                <a ui-sref="client.resa">
-                    <i class="fa fa-car icon text-info-lter"></i>
-                    <span class="font-bold" >Booking</span>
-                </a>
-            </li>
-
-            <li ui-sref-active="active">
-                <a ui-sref="app.table.list({categorie:'Reservation'})">
-                    <i class="fa fa-calendar-o icon text-info-lter"></i>
-                    <span class="font-bold" >Reservation</span>
-                </a>
-            </li>
-
-            <li ui-sref-active="active">
-                <a ui-sref="client.feedback">
-                    <i class="icon-like icon text-info-lter"></i>
-                    <span class="font-bold">FeedBack</span>
-                </a>
-            </li>
-            <li ui-sref-active="active">
-                <a ui-sref="app.table.list({categorie:'Compagnie'})">
-                    <i class="icon-info icon text-info-lter"></i>
-                    <span class="font-bold">Information</span>
-                </a>
-            </li>
-            <li ui-sref-active="active">
-                <a ui-sref="app.table.list({categorie:'Compagnie'})">
-                    <i class="icon-like icon text-info-lter"></i>
-                    <span class="font-bold">Service</span>
-                </a>
-            </li>
-            <li ui-sref-active="active">
-                <a ui-sref="app.table.list({categorie:'Compagnie'})">
-                    <i class="icon-like icon text-info-lter"></i>
-                    <span class="font-bold">Legal Notice</span>
-                </a>
-            </li>
-
-        </ul>
-        <!-- / list -->
         <!-- nav -->
+    <nav ui-nav class="navi" ng-include="'tpl/client/nav.html'"></nav>
+    <!-- nav -->
 
-        <!-- aside footer -->
-
-        <!-- / aside footer -->
+    <!-- aside footer -->
+    
+    <!-- / aside footer -->
     </div>
 </div>

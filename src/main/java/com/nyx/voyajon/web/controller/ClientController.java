@@ -6,16 +6,25 @@
 package com.nyx.voyajon.web.controller;
 
 import com.nyx.voyajon.entities.Passager;
+import com.nyx.voyajon.entities.PassagerStatut;
 import com.nyx.voyajon.entities.Reservation;
+import com.nyx.voyajon.entities.VoyageFeedback;
 import com.nyx.voyajon.exception.BusinessException;
 import com.nyx.voyajon.repositories.CompagnieRepository;
+import com.nyx.voyajon.repositories.PassagerRepository;
+import com.nyx.voyajon.repositories.ReservationRepository;
 import com.nyx.voyajon.repositories.TrajetRepository;
+import com.nyx.voyajon.repositories.VoyageFeedbackRepository;
 import com.nyx.voyajon.repositories.VoyageRepository;
 import com.nyx.voyajon.services.ReservationService;
 import com.nyx.voyajon.services.VoyageService;
+import com.nyx.voyajon.web.model.MyBookingDTO;
 import com.nyx.voyajon.web.model.SearchVoyage;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import javax.servlet.http.HttpSession;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +54,12 @@ public class ClientController {
     VoyageRepository vr;
     @Autowired
     ReservationService rs;
+    @Autowired
+    PassagerRepository pr;
+    @Autowired
+    ReservationRepository rr;
+    @Autowired
+    VoyageFeedbackRepository vfr;
 
     @RequestMapping(value = "/Voyage/search", method = RequestMethod.POST)
     public ResponseEntity<JSONObject> searchVoyageClient(@RequestBody SearchVoyage sv) throws Exception {
@@ -81,6 +96,53 @@ public class ClientController {
         Reservation r = rs.prendreReservation(vr.findOne(idvoyage), passagers);
         session.setAttribute("resa_faite", r);
         return r;
+    }
+
+    @RequestMapping(value = "/MyBookings", method = RequestMethod.POST)
+    public Set<Reservation> myBookings(@RequestBody MyBookingDTO mbdto) throws Exception {
+        Set<Reservation> resas = new HashSet();
+        List<Passager> passagers = new ArrayList();
+        if (mbdto.getEmail() != null) {
+            passagers.addAll(pr.findByEmailAndStatut(mbdto.getEmail(), PassagerStatut.RESERVE));
+        }
+        if (mbdto.getTelephone() != null) {
+            passagers.addAll(pr.findByTelephoneAndStatut(mbdto.getTelephone(), PassagerStatut.RESERVE));
+        }
+        if (passagers.isEmpty()) {
+            return resas;
+        } else {
+            for (Passager p : passagers) {
+                resas.add(p.getReservation());
+            }
+            return resas;
+        }
+    }
+
+    @RequestMapping(value = "/MyBooking", method = RequestMethod.POST)
+    public Passager myBooking(@RequestBody MyBookingDTO mbdto) throws Exception {
+        List<Passager> passagers = new ArrayList();
+        if (mbdto.getEmail() != null) {
+            passagers.addAll(pr.findByReservationCodeAndEmail(mbdto.getReservation(), mbdto.getEmail()));
+        }
+        if (mbdto.getTelephone() != null) {
+            passagers.addAll(pr.findByReservationCodeAndTelephone(mbdto.getReservation(), mbdto.getTelephone()));
+        }
+        if (passagers.isEmpty()) {
+            throw  new BusinessException(("No Data Available"));
+        } else {
+            return passagers.get(0);
+        }
+
+    }
+
+    @RequestMapping(value = "/VoyageFeedback", method = RequestMethod.POST)
+    public void sendFeedBack(@RequestBody VoyageFeedback vf) throws Exception {
+        vfr.save(vf);
+    }
+
+    @RequestMapping(value = "/CancelResa/{id}", method = RequestMethod.GET)
+    public void annulerReservation(@PathVariable Integer id) throws Exception {
+        rs.annulerReservation(rr.findOne(id));
     }
 
 }

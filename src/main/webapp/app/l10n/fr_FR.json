@@ -1,4 +1,20 @@
 {
+    "booking":"Reservation",
+    "departure":"Depart",
+    "return":"Retour",
+    "route":"Trajet",
+    "company":"Compagnie",
+    "seats":"Siege(s)",
+    "search":"Recherche",
+    "oneway":"Aller Simple",
+    "roundtrip":"Aller Retour",
+    "nodata":"Aucun Resultat",
+    "mybooking":"Mes Tickets",
+     "phone":"Telephone",
+      "name":"Nom & Prenom",
+         "passenger": "Passager",
+         "passenger1": "Entrez le No. Telephone ou l'email pour ce passager",
+         "mybooking1": "Entrez le No. Telephone ou l'email ",
     "login": {
         "legend": "Entrez vos identifiants",
         "username": "Login",
@@ -7,16 +23,7 @@
         "forget": "Mot de passe oublie?"
     },
     "search": {
-        "legend": "Recherche des Données",
-        "zonerecherche": "Zone de recherche",
-        "zonerecherche1": "Recherche avancée",
-        "attribut": "Attributs",
-        "operateur": "Operateur",
-        "mot": "Recherche",
-        "value": "Valeur recherchée",
-        "result": "Resultats recherche",
-        "criteres": "Clauses",
-        "criteresinit": "Init"
+        "legend": "Recherche des Données"
     },
     "form": {
         "legend": "(Les champs suivis de * sont obligatoires)",
@@ -26,13 +33,7 @@
         "reset": "Annuler",
         "add": "Nouveau",
         "del": "Supprimer",
-        "search": "Rechercher",
-        "refresh": "Rafraichir",
-        "listbegin": "Debut",
-        "listprevious": "Precedent",
-        "listnext": "Suivant",
-        "listend": "Fin",
-        "duplicate": "Duplicate"
+        "search": "Rechercher"
     },
     "menu": {
         "deconnexion": "Deconnexion",

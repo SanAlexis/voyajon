@@ -1,40 +1,98 @@
-<div class="bg-light lter b-b wrapper-md">
-    <h1 class="m-n font-thin h3"><i class="icon-like pull-left"></i> Feedback</h1>
-</div>
-<div class="wrapper-md"   ng-controller="FeedbackCtrl">
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <form role="form">
-                        <!-- rating -->
-                        <div  class="m-b-lg"  ng-show="!edited">
-                            <h4>Note</h4>
-                            <div ng-init="item.note = 5" class="m-b text-lg">
-                                <rating ng-model="item.note" max="5" state-on="'fa fa-star text-warning'" state-off="'fa fa-star-o'"></rating> <b>({{item.note}})</b>
+<div  ng-controller="FeedbackCtrl">
+    <div class="bg-light lter b-b wrapper-md">
+        <div class="btn-toolbar pull-right">
+            <div class=" btn-group pull-right ">
+                <button type="button" class="btn btn-default"    tooltip="Home"  ng-click="$state.go('client.home');">
+                    <i class="fa fa-home"></i>  
+                </button>
+                <button type="button" class="btn btn-default"    tooltip="Search"  ng-click="toggleSearchOk();"  ng-if="searchOk">
+                    <i class="fa fa-search"></i>  
+                </button>
+            </div>
+        </div>
+        <h1 class="m-n font-thin h3"><i class="icon-like pull-left"></i> Feedback</h1>
+        <small class="text-muted">{{'mybooking1'| translate }}</small>
+    </div>
+
+    <div class="wrapper-md"   >
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-info"  ng-show="!searchOk">
+                    <div class="panel-body" >
+                        <form class="form-horizontal form-validation" role="form"  name="searchform"  id="searchform"    ng-submit="search()">
+
+                            <div class="form-group">
+                                <label    class="col-sm-offset-3 col-sm-2 control-label">No {{'booking'| translate }}
+                                </label> 
+                                <div class="col-sm-2">
+                                    <input    class="form-control"  required=""   type="number"    ng-model="booking.reservation"    /> 
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label    class="col-sm-offset-3 col-sm-2 control-label">{{'phone'| translate }}
+                                </label> 
+                                <div class="col-sm-2">
+                                    <input    class="form-control"  ng-required="!booking.email"   type="tel"    ng-model="booking.telephone"    /> 
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label    class="col-sm-offset-3 col-sm-2 control-label">Email
+                                </label> 
+                                <div class="col-sm-2">
+                                    <input    class="form-control"  ng-required="!booking.telephone"    type="email"    ng-model="booking.email"    /> 
+                                </div>
                             </div>
 
-                        </div>
-                        <!-- / rating -->
 
-                        <div class="form-group"  ng-show="!edited" ng-init="item.commentaires = 'J\'apprecie vraiment cette application'">
+                            <div class="form-group">
+                                <div class="col-sm-offset-5 col-sm-2">
+                                    <button class="btn btn-block btn-primary" type="submit"  ng-disabled="searchform.$invalid || searchform.$pristine"  >
+                                        <i class="fa fa-search"  ng-show="!errorService.waiting">{{'search'| translate }}</i>
+                                        <i class="fa fa-spinner faa-spin animated" ng-show="errorService.waiting"></i>
+                                        <span ng-show="errorService.waiting">Loading...</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
 
-                            <label class="control-label">Commentaire</label>
-                            <textarea type="text" class="form-control"  ng-model="item.commentaires"  ></textarea>
-                        </div>
+                    </div>
+                </div>
 
-                        <div class="form-group"  ng-show="!edited">
-                            <input type="hidden"  ng-model="item.codeparticipant"  ng-init="item.codeparticipant=contact" >
-                            <button type="button" ng-click="$state.go('app.accueil')" class="btn btn-default">Abandonner </button>
-                            <button type="button" class="btn btn-primary"  ng-click="send()">Envoyer <i class="fa fa-spin fa-spinner" ng-show="spinner"></i></button>
+            </div>
+        </div>
 
-                        </div>                   
-                        <div class="form-group"  ng-show="edited">
-                            
-                            <p class="form-control-static"  style="font-size: xx-large;"  ><i class="icon-emoticon-smile"> </i>Merci de nous avoir donné votre feedback</p>
-                            <button type="button" ng-click="$state.go('app.accueil')" class="btn btn-default"><i class="icon-home  pull-left"></i>Retour </button>
-                        </div>  
-                    </form>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel panel-default" ng-show="searchOk">
+                    <div class="panel-body">
+                        <form role="form">
+                            <!-- rating -->
+                            <div  class="m-b-lg"  ng-show="!edited">
+                                <h4>Note</h4>
+                                <div ng-init="tsoftitem.note = 5" class="m-b text-lg">
+                                    <rating ng-model="tsoftitem.note" max="5" state-on="'fa fa-star text-warning'" state-off="'fa fa-star-o'"></rating> <b>({{tsoftitem.note}})</b>
+                                </div>
+
+                            </div>
+                            <!-- / rating -->
+
+                            <div class="form-group"  ng-show="!edited" ng-init="tsoftitem.commentaire = 'J\'apprecie vraiment cette application'">
+
+                                <label class="control-label">Commentaire</label>
+                                <textarea type="text" class="form-control"  ng-model="tsoftitem.commentaire"  ></textarea>
+                            </div>
+
+                            <div class="form-group"  ng-show="!edited">
+                                <button type="button" ng-click="toggleSearchOk();" class="btn btn-default">Abandonner </button>
+                                <button type="button" class="btn btn-primary"  ng-click="send()">Envoyer <i class="fa fa-spin fa-spinner" ng-show="spinner"></i></button>
+
+                            </div>                   
+                            <div class="form-group"  ng-show="edited">
+                                <p class="form-control-static"  style="font-size: xx-large;"  ><i class="icon-emoticon-smile"> </i>Merci de nous avoir donné votre feedback</p>
+                                <button type="button" ng-click="toggleSearchOk();" class="btn btn-default"><i class="icon-home  pull-left"></i>Retour </button>
+                            </div>  
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -42,27 +100,40 @@
 </div>
 
 <script>
-    app.controller('FeedbackCtrl', ['$scope', '$state', '$rootScope', '$http'
-            , function($scope, $state, $rootScope, $http) {
-                
+    app.controller('FeedbackCtrl', ['$scope', 'toaster', 'CrudService', '$http', 'ErrorService'
+                , function ($scope, toaster, CrudService, $http, ErrorService) {
+                    $scope.errorService = ErrorService;
+                    $scope.errorService.clear();
 
-                $scope.send = function() {
-                    $http({
-                        method: 'POST',
-                        url: $scope.baseurl + '/rest/Feedback/save',
-                        data: $.param($scope.item), // pass in data as strings
-                        headers: {'Content-Type': 'application/x-www-form-urlencoded'}  // set the headers so angular passing info as form data (not request payload)
-                    })
-                            .success(function(data) {
-                                $scope.edited = true;
-                                $scope.spinner = false;
-                            })
-                            .error(function(data) {
-                                $scope.open('sm', data);
-                                $scope.spinner = false;
-                            });
-                };
+                    $scope.toggleSearchOk = function () {
+                        $scope.searchOk = !$scope.searchOk;
+                    };
 
-            }])
-        ;
+                    $scope.searchOk = false;
+                    $scope.tsoftitem = {};
+
+                    $scope.search = function () {
+                        $scope.errorService.setwaiting();
+                        $http.post('client/MyBooking', $scope.booking)
+                                .success(function (data) {
+                                    $scope.errorService.setSucces();
+                                    $scope.toggleSearchOk();
+                                    $scope.tsoftitem.passager = data;
+                                });
+                    };
+
+                    $scope.send = function () {
+                        $scope.spinner = true;
+                        CrudService.save({categorie: 'Client/VoyageFeedback'}, $scope.tsoftitem,
+                                function (data) {
+                                    $scope.edited = true;
+                                    $scope.spinner = false;
+                                }, function (error) {
+                            toaster.pop("error", "Error", error);
+                            $scope.spinner = false;
+                        });
+                    };
+
+                }])
+            ;
 </script>

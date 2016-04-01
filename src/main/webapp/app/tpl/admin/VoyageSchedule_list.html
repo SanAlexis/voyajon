@@ -94,13 +94,82 @@
 
                 };
                 $scope.edit = function (row) {
-                    $state.go('app.form.elt', {categorie: $scope.categorie, id: row.code});
+                    CrudService.get({categorie: $scope.categorie, id: row.code}, function (data) {
+                        $scope.tsoftitem = data;
+                        $scope.openForm('lg', $scope.tsoftitem, $scope.rowCollection.indexOf(row));
+                    });
                 };
                 $scope.add = function () {
-                    $state.go('app.form.elt', {categorie: $scope.categorie, id: -1});
+                    $scope.tsoftitem = {};
+                    $scope.openForm('lg', {}, -1);
+                };
+
+                $scope.openForm = function (size, row, rowindex) {
+                    var modalInstance = $modal.open({
+                        templateUrl: 'tpl/admin/' + $scope.categorie + '_form.html',
+                        controller: $scope.categorie + 'Form',
+                        size: size,
+                        resolve: {
+                            row: function () {
+                                return row;
+                            }
+                        }
+                    });
+
+                    modalInstance.result.then(function () {
+                        $scope.rowCollection = CrudService.query({categorie: $scope.categorie});
+                        $log.info('Modal closed at: ' + new Date());
+                    }, function () {
+                        $log.info('Modal dismissed at: ' + new Date());
+                    });
+                };
+            });
+    app.controller("VoyageScheduleForm",
+            function VoyageScheduleForm($scope, $modalInstance, $http, toaster, ErrorService, CrudService,row) {
+                $scope.categorie = 'VoyageSchedule';
+                $scope.errorService = ErrorService;
+                $scope.errorService.clear();
+
+                $scope.tsoftitem = row;
+
+                $scope.save = function () {
+                    $scope.errorService.setwaiting();
+                    CrudService.save({categorie: $scope.categorie}, $scope.tsoftitem,
+                            function (data) {
+                                toaster.pop("success", "Success", "Operation Effectuée avec Succès");
+                                $scope.errorService.setSucces();
+                                $modalInstance.close();
+                            });
+                };
+
+
+                $scope.closemodal = function () {
+                    $modalInstance.dismiss('cancel');
+                };
+
+
+                $scope.agences = CrudService.query({categorie: 'Agencelist', id: -1});
+                $scope.trajets = CrudService.query({categorie: 'Trajet'});
+
+                $scope.today = new Date();
+                $scope.open1 = function ($event) {
+                    $event.preventDefault();
+                    $event.stopPropagation();
+                    $scope.opened1 = true;
+                };
+                $scope.open2 = function ($event) {
+                    $event.preventDefault();
+                    $event.stopPropagation();
+                    $scope.opened2 = true;
+                };
+                $scope.dateOptions = {
+                    formatYear: 'yy',
+                    startingDay: 1,
+                    class: 'datepicker'
                 };
 
 
             });
+
 
 </script>

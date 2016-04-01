@@ -61,20 +61,7 @@ public class VoyageController {
     @Autowired
     TarifRepository tarifRepository;
 
-    @RequestMapping(value = "/Horaire", method = RequestMethod.GET)
-    public ResponseEntity<List<LocalTime>> listHoraire() {
-        List<LocalTime> heures = new ArrayList();
-        LocalTime heuredebut = LocalTime.of(4, 0);
-        while (true) {
-            heures.add(heuredebut);
-            heuredebut = heuredebut.plusMinutes(15);
-            if (heuredebut.equals(LocalTime.of(1, 15))) {
-                break;
-            }
-        }
-        return new ResponseEntity<>(heures, HttpStatus.OK);
-    }
-
+    
     @RequestMapping(value = "/VoyageSchedule", method = RequestMethod.GET)
     public ResponseEntity<List<VoyageSchedule>> listVoyageSchedule() {
         return new ResponseEntity<>(voyageScheduleRepository.findAll(), HttpStatus.OK);
@@ -166,8 +153,7 @@ public class VoyageController {
 
     @RequestMapping(value = "/TakeResa/{id}", method = RequestMethod.POST)
     public Reservation prendreReservation(@PathVariable(value = "id") Integer idvoyage, @RequestBody List<Passager> passagers) throws Exception {
-        Reservation r = reservationservice.prendreReservation(voyageRepository.findOne(idvoyage), passagers);
-        return r;
+        return reservationservice.prendreReservation(voyageRepository.findOne(idvoyage), passagers);
     }
 
     public Reservation acheterTicket(@PathVariable(value = "id") Integer idvoyage, @RequestBody List<Passager> passagers) throws Exception {
