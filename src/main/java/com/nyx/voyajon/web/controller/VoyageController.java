@@ -22,7 +22,7 @@ import com.nyx.voyajon.web.model.SearchVoyage;
 import com.nyx.voyajon.web.model.VoyageCalendar;
 import com.nyx.voyajon.web.model.VoyageScheduleDTO;
 import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -120,6 +120,9 @@ public class VoyageController {
 
     @RequestMapping(value = "/Voyage", method = RequestMethod.POST)
     public ResponseEntity<Voyage> saveVoyage(@RequestBody Voyage v) throws Exception {
+        LocalDateTime arrivee=v.getDateDepart().atTime(v.getHeureDepart()).plusMinutes(v.getTrajet().getDuree());
+        v.setHeureArrivee(arrivee.toLocalTime());
+        v.setDateArrivee(arrivee.toLocalDate());
         return new ResponseEntity<>(voyageRepository.save(v), HttpStatus.OK);
     }
 

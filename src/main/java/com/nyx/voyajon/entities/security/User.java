@@ -5,6 +5,7 @@
  */
 package com.nyx.voyajon.entities.security;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.nyx.voyajon.entities.Employe;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -27,8 +28,7 @@ import org.springframework.security.core.userdetails.UserDetails;
  */
 @Entity
 public class User extends Employe implements UserDetails {
-    
-   
+
     @NotNull
     @Size(min = 1, max = 100)
     @Column(nullable = false, length = 100, unique = true)
@@ -46,19 +46,13 @@ public class User extends Employe implements UserDetails {
     private LocalDateTime date_changementpwd;
     @Column
     private LocalDateTime date_expirationpwd;
-
     @Column
-    private boolean accountNonExpired;
-     @Column
-    private boolean  enabled;
+    private boolean enabled;
     @Column
     private byte login_attempts;
-   
+
     @Enumerated(EnumType.STRING)
     private Profil profil;
-
-    
-   
 
     @Override
     public String getUsername() {
@@ -102,10 +96,6 @@ public class User extends Employe implements UserDetails {
         this.password = password;
     }
 
-    public void setAccountNonExpired(boolean accountNonExpired) {
-        this.accountNonExpired = accountNonExpired;
-    }
-
     public byte getLogin_attempts() {
         return login_attempts;
     }
@@ -114,34 +104,36 @@ public class User extends Employe implements UserDetails {
         this.login_attempts = login_attempts;
     }
 
-   
-    
-    
-
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(profil==null?Profil.USER.name():profil.name()));
+        authorities.add(new SimpleGrantedAuthority(profil == null ? Profil.USER.name() : profil.name()));
         return authorities;
     }
 
-    
-
     @Override
+    @JsonIgnore
     public boolean isAccountNonExpired() {
-        return accountNonExpired;
+        if (lastaccessdate != null) {
+            return lastaccessdate.plusYears(1).isAfter(LocalDateTime.now());
+        } else {
+            return true;
+        }
     }
 
 //    we will  limit login attempts in Spring Security, which means, if a user 
 //     try to login with an invalid password more than 3 times, 
 //       he system will lock the user and make it unable to login anymore.
     @Override
+    @JsonIgnore
     public boolean isAccountNonLocked() {
         return login_attempts <= 6;
     }
 
     @Override
+    @JsonIgnore
     public boolean isCredentialsNonExpired() {
         if (date_expirationpwd != null) {
             return date_expirationpwd.isAfter(LocalDateTime.now());
@@ -155,7 +147,6 @@ public class User extends Employe implements UserDetails {
         this.enabled = enabled;
     }
 
-    
     @Override
     public boolean isEnabled() {
         return enabled;
@@ -169,6 +160,4 @@ public class User extends Employe implements UserDetails {
         this.profil = profil;
     }
 
-    
-   
 }

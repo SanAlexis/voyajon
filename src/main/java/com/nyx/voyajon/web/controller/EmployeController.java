@@ -68,7 +68,6 @@ public class EmployeController {
             ShaPasswordEncoder spe = new ShaPasswordEncoder();
             u.setPassword(spe.encodePassword(u.getPassword(), null));
             u.setEnabled(true);
-            u.setAccountNonExpired(true);
             u.setDate_changementpwd(LocalDateTime.now());
             u.setDate_expirationpwd(u.getDate_changementpwd().plusMonths(6));
         }

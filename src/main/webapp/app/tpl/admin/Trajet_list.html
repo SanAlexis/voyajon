@@ -112,13 +112,8 @@
                         }
                     });
 
-                    modalInstance.result.then(function (item) {
-                        if (rowindex === -1) {
-                            $scope.rowCollection.push(item);
-                        } else {
-                            $scope.rowCollection.splice(rowindex, 1);
-                            $scope.rowCollection.push(item);
-                        }
+                    modalInstance.result.then(function () {
+                        $scope.rowCollection = CrudService.query({categorie: $scope.categorie});
                         $log.info('Modal closed at: ' + new Date());
                     }, function () {
                         $log.info('Modal dismissed at: ' + new Date());
@@ -143,7 +138,7 @@
                             function (data) {
                                 toaster.pop("success", "Success", "Operation Effectuée avec Succès");
                                 $scope.errorService.setSucces();
-                                $modalInstance.close(data);
+                                $modalInstance.close();
                             });
                 };
 

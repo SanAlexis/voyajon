@@ -10,7 +10,7 @@
         <!--    <pre>{{passagers}}</pre>-->
 
         <div class="row">
-            <div  ng-class="{ 'col-lg-6': passagers.length>1, 'col-lg-12': passagers.length==1 }" ng-repeat="p in passagers">
+            <div  ng-class="{ 'col-sm-6': passagers.length>1, 'col-sm-12': passagers.length==1 }" ng-repeat="p in passagers">
                 <fieldset>
                     <legend>
                         {{'passenger'| translate }} {{$index + 1}}
@@ -18,9 +18,9 @@
                     </legend>
 
                     <div class="form-group"  >
-                        <label    class="col-lg-3 control-label">{{'name'| translate }}<span style="color:red">*</span>
+                        <label    class="col-sm-3 control-label">{{'name'| translate }}<span style="color:red">*</span>
                         </label> 
-                        <div class="col-lg-8">
+                        <div class="col-sm-8">
                             <div class="input-group m-b">
                                 <input type="text" class="form-control"  required=""  ng-model="p.nom_prenom">
                                 <span class="input-group-addon"><i class="fa fa-user"></i></span>
@@ -28,9 +28,9 @@
                         </div>
                     </div>
                     <div class="form-group"  >
-                        <label    class=" col-lg-3 control-label">  {{'phone'| translate }}
+                        <label    class=" col-sm-3 control-label">  {{'phone'| translate }}
                         </label> 
-                        <div class="col-lg-8">
+                        <div class="col-sm-8">
                             <div class="input-group m-b">
                                 <input type="tel" class="form-control"    ng-model="p.telephone"  ng-required="$first && !p.email">
                                 <span class="input-group-addon"><i class="fa fa-phone"></i></span>
@@ -39,9 +39,9 @@
 
                     </div>
                     <div class="form-group"  >
-                        <label    class=" col-lg-3 control-label">Email
+                        <label    class=" col-sm-3 control-label">Email
                         </label> 
-                        <div class="col-lg-8">
+                        <div class="col-sm-8">
                             <div class="input-group m-b">
                                 <input type="email" class="form-control"    ng-model="p.email"   ng-required="$first && !p.telephone">
                                 <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
@@ -50,9 +50,9 @@
 
                     </div>
                     <div class="form-group"  >
-                        <label    class=" col-lg-3 control-label">No CNI
+                        <label    class=" col-sm-3 control-label">No CNI
                         </label> 
-                        <div class="col-lg-8">
+                        <div class="col-sm-8">
                             <div class="input-group m-b">
                                 <input type="number" class="form-control"    ng-model="p.numero_cni">
                                 <span class="input-group-addon"><i class="fa fa-lock"></i></span>

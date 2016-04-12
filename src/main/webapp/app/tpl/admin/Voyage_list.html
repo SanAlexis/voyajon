@@ -45,7 +45,7 @@
 
                 <div class="form-group">
                      <button class="btn btn-primary" type="submit"  ng-disabled="searchform1.$invalid || searchform1.$pristine">
-                        <i class="fa fa-search"  ng-show="!errorService.waiting">{{'search.mot'| translate }}</i>
+                        <i class="fa fa-search"  ng-show="!errorService.waiting">{{'search'| translate }}</i>
                         <i class="fa fa-spinner faa-spin animated" ng-show="errorService.waiting"></i>
                         <span ng-show="errorService.waiting">Loading...</span>
                     </button>
@@ -133,24 +133,13 @@
                 $scope.itemsByPage = 10;
 
                 $scope.delete = function (row) {
-                    var r = confirm("Confirm ?");
-                    if (r == true) {
-                        CrudService.delete({categorie: $scope.categorie, id: row.code}, function (data) {
-                            var index = $scope.rowCollection.indexOf(row);
-                            if (index !== -1) {
-                                $scope.rowCollection.splice(index, 1);
-                            }
-                            toaster.pop("success", "Success", "Suppression Effectuée avec Succès");
-                        }, function (error) {
-                            toaster.pop("error", "Error", error);
-                        });
-                    }
+                    
                 };
                 $scope.edit = function (row) {
                     $state.go('app.form.elt', {categorie: $scope.categorie, id: row.code});
                 };
                 $scope.add = function () {
-                    $state.go('app.form.elt', {categorie: $scope.categorie});
+                    $state.go('app.form.elt', {categorie: $scope.categorie,id:-1});
                 };
 
                 $scope.search = function () {

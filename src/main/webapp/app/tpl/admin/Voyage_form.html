@@ -18,7 +18,7 @@
 
         <div class="row"  ng-show="app.settings.debugmode">
             <div class="col-lg-12">
-                <pre>{{tsoftitem}}</pre>
+                <pre>{{form}}</pre>
             </div>
         </div>
 
@@ -41,13 +41,13 @@
                                                 <timepicker ng-model="tsoftitem.heureDepart"  required="" hour-step="1" minute-step="15" show-meridian="false"  show-spinners="false"></timepicker>
                                             </div>
                                         </div>
-                                        <div class="form-group"  >
-                                            <label    class="col-lg-4 control-label">Heure Arrivee
-                                            </label> 
-                                            <div class="col-lg-8">
-                                                <timepicker ng-model="tsoftitem.heureArrivee"  required="" hour-step="1" minute-step="15" show-meridian="false"  show-spinners="false"></timepicker>
-                                            </div>
-                                        </div>
+                                        <!--                                        <div class="form-group"  >
+                                                                                    <label    class="col-lg-4 control-label">Heure Arrivee
+                                                                                    </label> 
+                                                                                    <div class="col-lg-8">
+                                                                                        <timepicker ng-model="tsoftitem.heureArrivee"  required="" hour-step="1" minute-step="15" show-meridian="false"  show-spinners="false"></timepicker>
+                                                                                    </div>
+                                                                                </div>-->
                                         <div class="form-group"  >
                                             <label    class=" col-lg-4 control-label">Date Depart<span style="color:red">*</span>
                                             </label> 
@@ -62,20 +62,20 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group"  >
-                                            <label    class=" col-lg-4 control-label">Date Arrivee<span style="color:red">*</span>
-                                            </label> 
-                                            <div class="col-lg-8">
-                                                <div class="input-group w-md">
-                                                    <input type="text" class="form-control" datepicker-popup="dd/MM/yyyy"  placeholder="dd/MM/yyyy" ng-model="tsoftitem.dateArrivee"   
-                                                           min-date="tsoftitem.dateDepart"  is-open="opened2" datepicker-options="dateOptions" 
-                                                           ng-required="true"   show-button-bar="false"  />
-                                                    <span class="input-group-btn">
-                                                        <button type="button" class="btn btn-default" ng-click="open2($event)"><i class="glyphicon glyphicon-calendar"></i></button>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        <!--                                        <div class="form-group"  >
+                                                                                    <label    class=" col-lg-4 control-label">Date Arrivee<span style="color:red">*</span>
+                                                                                    </label> 
+                                                                                    <div class="col-lg-8">
+                                                                                        <div class="input-group w-md">
+                                                                                            <input type="text" class="form-control" datepicker-popup="dd/MM/yyyy"  placeholder="dd/MM/yyyy" ng-model="tsoftitem.dateArrivee"   
+                                                                                                   min-date="tsoftitem.dateDepart"  is-open="opened2" datepicker-options="dateOptions" 
+                                                                                                   ng-required="true"   show-button-bar="false"  />
+                                                                                            <span class="input-group-btn">
+                                                                                                <button type="button" class="btn btn-default" ng-click="open2($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                                                                                            </span>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>-->
 
                                         <div class="form-group"  >
                                             <label    class="col-lg-4 control-label">Statut
@@ -90,6 +90,18 @@
                                                     <option>ANNULE</option>
                                                 </select>
                                             </div>
+
+                                        </div>
+                                        <div class="form-group"  >
+                                            <label    class="col-lg-4 control-label">Nbre Places Confirmées
+                                            </label> 
+                                            <div class="col-lg-8"><input type="number" class="form-control"  readonly=""  ng-model="tsoftitem.nbre_places_confirmees"></div>
+
+                                        </div>
+                                        <div class="form-group"  >
+                                            <label    class="col-lg-4 control-label">Nbre Places Reservees
+                                            </label> 
+                                            <div class="col-lg-8"><input type="number" class="form-control"  readonly=""  ng-model="tsoftitem.nbre_places_reservees"></div>
 
                                         </div>
                                         <div class="form-group">
@@ -139,6 +151,12 @@
 
                                         </div>
                                         <div class="form-group"  >
+                                            <label    class="col-lg-4 control-label">Tarif<span style="color:red">*</span>
+                                            </label> 
+                                            <div class="col-lg-8"><input type="number" class="form-control"   ng-model="tsoftitem.tarif"></div>
+
+                                        </div>
+                                        <div class="form-group"  >
                                             <label    class="col-lg-4 control-label">Chauffeur
                                             </label> 
                                             <div class="col-lg-8">
@@ -149,21 +167,6 @@
                                             </div>
 
                                         </div>
-
-                                        <div class="form-group"  >
-                                            <label    class="col-lg-4 control-label">Nbre Places Confirmées
-                                            </label> 
-                                            <div class="col-lg-8"><input type="number" class="form-control"  readonly=""  ng-model="tsoftitem.nbre_places_confirmees"></div>
-
-                                        </div>
-                                        <div class="form-group"  >
-                                            <label    class="col-lg-4 control-label">Nbre Places Reservees
-                                            </label> 
-                                            <div class="col-lg-8"><input type="number" class="form-control"  readonly=""  ng-model="tsoftitem.nbre_places_reservees"></div>
-
-                                        </div>
-
-
                                     </div>
                                 </div>
 
@@ -197,14 +200,13 @@
 <script type="text/javascript" >
 
     app.controller("VoyageForm",
-            function VoyageForm($scope,  toaster,  ErrorService, $stateParams, CrudService) {
+            function VoyageForm($scope, toaster, ErrorService, $stateParams, CrudService, $state) {
                 $scope.categorie = 'Voyage';
                 $scope.errorService = ErrorService;
                 $scope.errorService.clear();
 
-                if ($stateParams.id === -1) {
+                if ($stateParams.id == -1) {
                     $scope.tsoftitem = {};
-                    alert('$stateParams.id');
                 } else {
                     CrudService.get({categorie: $scope.categorie, id: $stateParams.id}, function (data) {
                         $scope.tsoftitem = data;
@@ -223,9 +225,8 @@
                             function (data) {
                                 toaster.pop("success", "Success", "Operation Effectuée avec Succès");
                                 $scope.errorService.setSucces();
-                                $scope.form.$setPristine();
-                                alert(data);
                                 $scope.tsoftitem = data;
+                                $state.go('app.form.elt', {categorie: $scope.categorie, id: data.code});
                             });
                 };
 
