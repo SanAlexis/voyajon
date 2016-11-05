@@ -32,7 +32,7 @@
                         </label> 
                         <div class="col-sm-8">
                             <div class="input-group m-b">
-                                <input type="tel" class="form-control"    ng-model="p.telephone"  ng-required="$first && !p.email">
+                                <input type="tel" class="form-control"  ng-pattern="/^6([5679]{1})(\d{7})$/"   ng-model="p.telephone"  ng-required="$first && !p.email">
                                 <span class="input-group-addon"><i class="fa fa-phone"></i></span>
                             </div>
                         </div>

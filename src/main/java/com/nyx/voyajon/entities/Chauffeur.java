@@ -6,14 +6,25 @@
 package com.nyx.voyajon.entities;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 /**
  *
  * @author eisti
  */
 @Entity
-public class Chauffeur  extends Employe{
+public class Chauffeur  extends Personne{
     
+    @ManyToOne
+    private Compagnie compagnie;
+
+    public Compagnie getCompagnie() {
+        return compagnie;
+    }
+
+    public void setCompagnie(Compagnie compagnie) {
+        this.compagnie = compagnie;
+    }
     
     
 }

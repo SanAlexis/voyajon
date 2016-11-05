@@ -5,20 +5,17 @@
  */
 package com.nyx.voyajon.repositories;
 
-import com.nyx.voyajon.entities.Bus;
-import java.util.List;
+import com.nyx.voyajon.entities.notification.MailSetting;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.security.access.prepost.PostFilter;
 
 /**
  *
  * @author eisti
  */
-public interface BusRepository  extends JpaRepository<Bus, Integer>{
+public interface MailSettingRepository  extends JpaRepository<MailSetting, Integer>{
  
-    @PostFilter("filterObject.compagnie.code==principal.profil.code or hasRole('ADMIN') ")
-    @Override
-    public List<Bus> findAll();
+   
+    public MailSetting findByEnabled(boolean  enabled);
     
     
   

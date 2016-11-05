@@ -36,7 +36,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @EnableTransactionManagement
 @EnableScheduling
-@PropertySource("classpath:app.properties")
+@PropertySource("file:app.properties")
 @EnableJpaRepositories(basePackages = {"com.nyx.voyajon.repositories"})
 @EnableJpaAuditing(auditorAwareRef = "auditorAwareImpl")
 public class JpaConfig {

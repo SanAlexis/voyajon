@@ -1,5 +1,5 @@
 app.controller("PassagerForm",
-        function PassagerForm($scope, $modalInstance, toaster, ErrorService, CrudService, idvoyage, nbreplaces) {
+        function PassagerForm($scope, $modalInstance, toaster, ErrorService, CrudService, idvoyage, nbreplaces,url) {
 
             $scope.errorService = ErrorService;
             $scope.errorService.clear();
@@ -12,7 +12,7 @@ app.controller("PassagerForm",
 
             $scope.save = function () {
                 $scope.errorService.setwaiting();
-                CrudService.save({categorie: 'TakeResa', id: idvoyage}, $scope.passagers,
+                CrudService.save({categorie: url, id: idvoyage}, $scope.passagers,
                         function (data) {
                             toaster.pop("success", "Success", "Reservation Effectuée avec Succès");
                             $scope.errorService.setSucces();
@@ -25,21 +25,6 @@ app.controller("PassagerForm",
                         });
             };
             
-            $scope.saveClient = function () {
-                $scope.errorService.setwaiting();
-                CrudService.save({categorie: 'Client/TakeResa', id: idvoyage}, $scope.passagers,
-                        function (data) {
-                            toaster.pop("success", "Success", "Reservation Effectuée avec Succès");
-                            $scope.errorService.setSucces();
-                            $modalInstance.close();
-                        },
-                        function (error) {
-                            toaster.pop("error", "Error", error);
-                            $scope.errorService.clear();
-                            $modalInstance.close();
-                        });
-            };
-
             $scope.closemodal = function () {
                 $modalInstance.dismiss('cancel');
             };

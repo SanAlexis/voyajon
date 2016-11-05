@@ -7,7 +7,6 @@ package com.nyx.voyajon.web.controller;
 
 import com.nyx.voyajon.entities.Passager;
 import com.nyx.voyajon.entities.Reservation;
-import com.nyx.voyajon.entities.Tarif;
 import com.nyx.voyajon.entities.Voyage;
 import com.nyx.voyajon.entities.VoyageSchedule;
 import com.nyx.voyajon.exception.BusinessException;
@@ -23,14 +22,11 @@ import com.nyx.voyajon.web.model.VoyageCalendar;
 import com.nyx.voyajon.web.model.VoyageScheduleDTO;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import javax.servlet.http.HttpSession;
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -61,7 +57,6 @@ public class VoyageController {
     @Autowired
     TarifRepository tarifRepository;
 
-    
     @RequestMapping(value = "/VoyageSchedule", method = RequestMethod.GET)
     public ResponseEntity<List<VoyageSchedule>> listVoyageSchedule() {
         return new ResponseEntity<>(voyageScheduleRepository.findAll(), HttpStatus.OK);
@@ -85,19 +80,19 @@ public class VoyageController {
     }
 
     ////VOYAGE
-    
+    @PostFilter("filterObject.agence.compagnie.code==principal.profil.code or hasRole('ADMIN') ")
     @RequestMapping(value = "/Voyage/search", method = RequestMethod.POST)
-    public ResponseEntity<List<Voyage>> searchVoyage(@RequestBody SearchVoyage sv) throws Exception {
+    public List<Voyage> searchVoyage(@RequestBody SearchVoyage sv) throws Exception {
         if (sv.getAgence() != null && sv.getTrajet() != null) {
-            return new ResponseEntity<>(voyageRepository.findByDateDepartAndTrajetAndAgence(sv.getDate_depart(), sv.getTrajet(), sv.getAgence()), HttpStatus.OK);
+            return voyageRepository.findByDateDepartAndTrajetAndAgence(sv.getDate_depart(), sv.getTrajet(), sv.getAgence());
         } else {
-           if (sv.getAgence()!=null){
-               return new ResponseEntity<>(voyageRepository.findByDateDepartAndAgence(sv.getDate_depart(),sv.getAgence()), HttpStatus.OK);
-           }
-           if (sv.getTrajet()!=null){
-                return new ResponseEntity<>(voyageRepository.findByDateDepartAndTrajet(sv.getDate_depart(),sv.getTrajet()), HttpStatus.OK);
-           }
-           return new ResponseEntity<>(voyageRepository.findByDateDepart(sv.getDate_depart()), HttpStatus.OK);
+            if (sv.getAgence() != null) {
+                return voyageRepository.findByDateDepartAndAgence(sv.getDate_depart(), sv.getAgence());
+            }
+            if (sv.getTrajet() != null) {
+                return voyageRepository.findByDateDepartAndTrajet(sv.getDate_depart(), sv.getTrajet());
+            }
+            return voyageRepository.findByDateDepart(sv.getDate_depart());
         }
     }
 
@@ -114,13 +109,14 @@ public class VoyageController {
     }
 
     @RequestMapping(value = "/Voyage", method = RequestMethod.GET)
-    public ResponseEntity<List<Voyage>> listTodayVoyage() throws Exception {
-        return new ResponseEntity<>(voyageRepository.findByDateDepart(LocalDate.now()), HttpStatus.OK);
+    @PostFilter("filterObject.agence.compagnie.code==principal.profil.code or hasRole('ADMIN') ")
+    public List<Voyage> listTodayVoyage() throws Exception {
+        return voyageRepository.findByDateDepart(LocalDate.now());
     }
 
     @RequestMapping(value = "/Voyage", method = RequestMethod.POST)
     public ResponseEntity<Voyage> saveVoyage(@RequestBody Voyage v) throws Exception {
-        LocalDateTime arrivee=v.getDateDepart().atTime(v.getHeureDepart()).plusMinutes(v.getTrajet().getDuree());
+        LocalDateTime arrivee = v.getDateDepart().atTime(v.getHeureDepart()).plusMinutes(v.getTrajet().getDuree());
         v.setHeureArrivee(arrivee.toLocalTime());
         v.setDateArrivee(arrivee.toLocalDate());
         return new ResponseEntity<>(voyageRepository.save(v), HttpStatus.OK);
@@ -159,6 +155,7 @@ public class VoyageController {
         return reservationservice.prendreReservation(voyageRepository.findOne(idvoyage), passagers);
     }
 
+    @RequestMapping(value = "/ConfirmResa/{id}", method = RequestMethod.POST)
     public Reservation acheterTicket(@PathVariable(value = "id") Integer idvoyage, @RequestBody List<Passager> passagers) throws Exception {
         return reservationservice.acheterTicket(voyageRepository.findOne(idvoyage), passagers);
     }

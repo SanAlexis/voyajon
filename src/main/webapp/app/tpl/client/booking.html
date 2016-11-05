@@ -109,7 +109,7 @@
                             <tbody>
                                 <tr  ng-if="!voyages.aller.length">
                                     <td colspan="2">
-                                       {{'nodata'| translate }}
+                                        {{'nodata'| translate }}
                                     </td>
                                 </tr>
                                 <tr  ng-repeat="v in voyages.aller">
@@ -159,7 +159,7 @@
                                         <div class="ng-hide" ng-show='v.vip'><i class="fa fa-ticket text-muted m-r-xs"></i> VIP</div>
                                         <div class="ng-hide" ng-show='v.statut'><i class="fa fa-clock-o text-muted m-r-xs"></i> {{v.statut}}</div>
                                     </td>
-                                     <td>
+                                    <td>
                                         <span class="arrow"></span>
                                         <div class="ng-hide" ng-show='v.tarif'><i class="fa fa-money text-muted m-r-xs"></i> {{v.tarif * searchVoyage.places|  number:0}} FCFA</div>
                                         <div ><i class="fa fa-male text-muted m-r-xs"></i>{{searchVoyage.places}} X {{v.tarif|  number:0}} </div>
@@ -210,8 +210,9 @@
         $http.get('client/Voyage/search')
                 .success(function (data) {
                     $scope.trajets = data.trajets;
-                    $scope.compagnies =data.compagnies;
+                    $scope.compagnies = data.compagnies;
                 });
+
         $scope.search = function () {
             $scope.errorService.setwaiting();
             $http.post('client/Voyage/search', $scope.searchVoyage)
@@ -236,6 +237,9 @@
                                 },
                                 nbreplaces: function () {
                                     return nbreplaces;
+                                },
+                                url: function () {
+                                    return 'Client/TakeResa';
                                 }
                             }
                         });

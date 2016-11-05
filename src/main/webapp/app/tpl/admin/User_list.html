@@ -24,9 +24,8 @@
                     <tr>
                         <th st-sort="nom_prenom">Nom</th>
                         <th st-sort="username">Login</th>
-                        <th st-sort="profil">Profil</th>
+                        <th >Profil</th>
                         <th st-sort="enabled">Actif</th>
-                        <th st-sort="compagnie.libelle">Agence</th>
                         <th> 
                             <button type="button" class="btn btn-primary" ng-click="add();"  
                                     tooltip="{{'form.add'| translate}}">
@@ -39,9 +38,8 @@
                     <tr ng-repeat="row in displayedCollection">
                         <td>{{row.nom_prenom}}</td>
                         <td>{{row.username}}</td>
-                        <td>{{row.profil}}</td>
+                        <td>{{row.profil.libelle}}</td>
                         <td>{{row.enabled}}</td>
-                        <td>{{row.compagnie.libelle}}</td>
                         <td>
                             <button type="button" ng-click="edit(row);" class="btn btn-sm btn-default">
                                 <i class="fa fa-edit">
@@ -159,7 +157,7 @@
                     $modalInstance.dismiss('cancel');
                 };
 
-                $scope.compagnies = CrudService.query({categorie: 'Compagnie'});
+                $scope.profils = CrudService.query({categorie: 'Profil'});
                
             });
 </script>

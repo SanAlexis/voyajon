@@ -6,7 +6,9 @@
 package com.nyx.voyajon.repositories;
 
 import com.nyx.voyajon.entities.security.User;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.security.access.prepost.PostFilter;
 
 /**
  *
@@ -17,5 +19,7 @@ public interface UserRepository  extends JpaRepository<User, Integer>{
     
     public User findByUsername(String username);
     
-  
+    @PostFilter("filterObject.profil.code==principal.profil.code or hasRole('ADMIN') ")
+    @Override
+    public List<User> findAll();
 }

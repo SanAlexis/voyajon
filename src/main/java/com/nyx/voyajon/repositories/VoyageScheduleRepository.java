@@ -6,12 +6,17 @@
 package com.nyx.voyajon.repositories;
 
 import com.nyx.voyajon.entities.VoyageSchedule;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.security.access.prepost.PostFilter;
 
 /**
  *
  * @author eisti
  */
-public interface VoyageScheduleRepository extends JpaRepository<VoyageSchedule, Integer>{
-    
+public interface VoyageScheduleRepository extends JpaRepository<VoyageSchedule, Integer> {
+
+    @Override
+    @PostFilter("filterObject.agence.compagnie.code==principal.profil.code or hasRole('ADMIN') ")
+    List<VoyageSchedule> findAll();
 }

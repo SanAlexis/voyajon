@@ -30,53 +30,49 @@ public abstract class AuditEntity implements Serializable {
 
     @LastModifiedDate
     @Column(name = "date_modification")
-    protected Instant dateModification;
+    protected Instant lastModifiedDate;
     @CreatedDate
     @Column(name = "date_creation")
-    protected Instant dateCreation;
-    @JoinColumn(name = "code_modificateur", referencedColumnName = "code")
-    @ManyToOne
+    protected Instant createdDate;
     @LastModifiedBy
-    protected User code_modificateur;
-    @JoinColumn(name = "code_createur", referencedColumnName = "code")
-    @ManyToOne
+    @Column(name = "user_modificateur")
+    protected String lastModifiedBy;
     @CreatedBy
-    protected User code_createur;
+    @Column(name = "user_createur")
+    protected String createdBy;
 
+    public Instant getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
+    public void setLastModifiedDate(Instant lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public Instant getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Instant createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public String getLastModifiedBy() {
+        return lastModifiedBy;
+    }
+
+    public void setLastModifiedBy(String lastModifiedBy) {
+        this.lastModifiedBy = lastModifiedBy;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
     
-    public User getCode_modificateur() {
-        return code_modificateur;
-    }
-
-    public void setCode_modificateur(User code_modificateur) {
-        this.code_modificateur = code_modificateur;
-    }
-
-  
-    public User getCode_createur() {
-        return code_createur;
-    }
-
-    public void setCode_createur(User code_createur) {
-        this.code_createur = code_createur;
-    }
-
-    public Instant getDateModification() {
-        return dateModification;
-    }
-
-    public void setDateModification(Instant dateModification) {
-        this.dateModification = dateModification;
-    }
-
-    public Instant getDateCreation() {
-        return dateCreation;
-    }
-
-    public void setDateCreation(Instant dateCreation) {
-        this.dateCreation = dateCreation;
-    }
-
-   
     
+
 }

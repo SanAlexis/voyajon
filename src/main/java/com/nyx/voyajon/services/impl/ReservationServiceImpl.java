@@ -15,17 +15,21 @@ import com.nyx.voyajon.entities.ReservationMode;
 import com.nyx.voyajon.entities.Voyage;
 import com.nyx.voyajon.repositories.PassagerRepository;
 import com.nyx.voyajon.repositories.ReservationRepository;
-import com.nyx.voyajon.services.MailService;
+import com.nyx.voyajon.services.notification.MailService;
 import com.nyx.voyajon.services.ReservationService;
 import com.nyx.voyajon.services.VoyageService;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 /**
  *
@@ -46,13 +50,39 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public Reservation prendreReservation(Voyage v, List<Passager> passagers) throws Exception {
         if (!voyageService.checkReservationDisponible(v, Byte.valueOf(passagers.size() + ""))) {
-            throw new BusinessException("Reservation Impossible ");
+            throw new BusinessException("Places non disponibles");
         }
-        return completeReservation(v, passagers, PassagerStatut.RESERVE, ReservationMode.MOBILE);
+        Reservation r = completeReservation(v, passagers, PassagerStatut.RESERVE, ReservationMode.MOBILE);
+
+        Map<String, Object> emailData = new HashMap<>();
+        emailData.put("compagnie", r.getVoyage().getAgence().getLibelle());
+        emailData.put("villeA", r.getVoyage().getTrajet().getVilleA().getLibelle());
+        emailData.put("villeB", r.getVoyage().getTrajet().getVilleB().getLibelle());
+        emailData.put("date", r.getVoyage().getDateDepart().toString());
+        emailData.put("heure", r.getVoyage().getHeureDepart().toString());
+        emailData.put("agenceVille", r.getVoyage().getAgence().getVille().getLibelle());
+        emailData.put("agenceAdresse", r.getVoyage().getAgence().getAdresse()==null?"":r.getVoyage().getAgence().getAdresse());
+        emailData.put("agenceTel", r.getVoyage().getAgence().getTelephone1()==null?"":r.getVoyage().getAgence().getTelephone1());
+        emailData.put("agenceUrl", r.getVoyage().getAgence().getCompagnie().getSiteweb()==null?"":r.getVoyage().getAgence().getCompagnie().getSiteweb());
+
+        List<String> listEmail = new ArrayList();
+        passagers.stream().filter((p) -> (StringUtils.hasText(p.getEmail()))).forEach((p) -> {
+            listEmail.add(p.getEmail());
+        });
+
+        if (!listEmail.isEmpty()) {
+            String[] arrayEmail = new String[listEmail.size()];
+            arrayEmail = listEmail.toArray(arrayEmail);
+            mailservice.sendEmail("arthur.tchipnang@twinsol.com", arrayEmail, "Voyajon Booking Number #" + r.getCode(), emailData, "TakeResa.ftl");
+        }
+        return r;
     }
 
     @Override
     public Reservation acheterTicket(Voyage v, List<Passager> passagers) throws Exception {
+        if (!voyageService.checkReservationDisponible(v, Byte.valueOf(passagers.size() + ""))) {
+            throw new BusinessException("Places non disponibles");
+        }
         return completeReservation(v, passagers, PassagerStatut.CONFIRME, ReservationMode.WEB);
     }
 
@@ -63,7 +93,7 @@ public class ReservationServiceImpl implements ReservationService {
         List<Passager> passagers = v.getPassagers();
         passagers.forEach((p) -> {
             p.setStatut(ANNULE);
-//            mailservice.sendEmail(null, new String {p.getEmail()}, null, null, null);
+
         });
         reservationRepository.save(v);
         passagerRepository.save(passagers);

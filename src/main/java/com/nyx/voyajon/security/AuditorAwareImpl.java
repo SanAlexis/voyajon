@@ -5,7 +5,6 @@
  */
 package com.nyx.voyajon.security;
 
-import com.nyx.voyajon.entities.security.User;
 import com.nyx.voyajon.utils.SecurityUtils;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.stereotype.Component;
@@ -15,11 +14,11 @@ import org.springframework.stereotype.Component;
  * @author eisti
  */
 @Component
-public class AuditorAwareImpl implements AuditorAware<User> {
+public class AuditorAwareImpl implements AuditorAware<String> {
 
     @Override
-    public User getCurrentAuditor() {
-        return SecurityUtils.getCurrentUser();
+    public String getCurrentAuditor() {
+        return SecurityUtils.getCurrentUserName();
     }
 
 }

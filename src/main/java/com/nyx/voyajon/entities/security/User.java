@@ -6,15 +6,14 @@
 package com.nyx.voyajon.entities.security;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.nyx.voyajon.entities.Employe;
+import com.nyx.voyajon.entities.Personne;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.hibernate.annotations.NaturalId;
@@ -27,7 +26,7 @@ import org.springframework.security.core.userdetails.UserDetails;
  * @author tchipi
  */
 @Entity
-public class User extends Employe implements UserDetails {
+public class User extends Personne implements UserDetails {
 
     @NotNull
     @Size(min = 1, max = 100)
@@ -51,7 +50,7 @@ public class User extends Employe implements UserDetails {
     @Column
     private byte login_attempts;
 
-    @Enumerated(EnumType.STRING)
+    @ManyToOne
     private Profil profil;
 
     @Override
@@ -109,7 +108,7 @@ public class User extends Employe implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         List<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(new SimpleGrantedAuthority(profil == null ? Profil.USER.name() : profil.name()));
+        if (profil!=null) authorities.add(new SimpleGrantedAuthority(profil.getLibelle()));
         return authorities;
     }
 

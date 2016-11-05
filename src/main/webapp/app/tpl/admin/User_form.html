@@ -33,34 +33,14 @@
                             <input type="text" class="form-control"  required=""  ng-model="tsoftitem.username">
                         </div>
                     </div>
+                    
                     <div class="form-group"  >
-                        <label    class=" col-lg-4  control-label">Role
+                        <label    class=" col-lg-4  control-label">Profil
                             <span style="color:red">*</span>
                         </label> 
                         <div class="col-lg-8">
-                            <div class="radio-inline">
-                                <label class="i-checks">
-                                    <input type="radio" ng-model="tsoftitem.profil"  value="USER">
-                                    <i></i>
-                                    USER
-                                </label>
-                            </div>
-                            <div class="radio-inline">
-                                <label class="i-checks">
-                                    <input type="radio" ng-model="tsoftitem.profil" value="ADMIN">
-                                    <i></i>
-                                    ADMIN
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group"  >
-                        <label    class=" col-lg-4  control-label">Compagnie
-                            <span style="color:red">*</span>
-                        </label> 
-                        <div class="col-lg-8">
-                            <select   required=""   ng-model="tsoftitem.compagnie" 
-                                      ng-options="c as c.libelle  for c in compagnies  track by c.code"
+                            <select   required=""   ng-model="tsoftitem.profil" 
+                                      ng-options="c as c.libelle  for c in profils  track by c.code"
                                       class="form-control"  >
                                 <option>--</option>
                             </select>
@@ -68,6 +48,14 @@
                     </div>
                     <div class="form-group"  >
                         <label    class=" col-lg-4  control-label">Mot de passe
+                            <span style="color:red">*</span>
+                        </label> 
+                        <div class="col-lg-8">
+                            <input type="password" class="form-control"  required=""  ng-model="tsoftitem.password">
+                        </div>
+                    </div>
+                    <div class="form-group"  >
+                        <label    class=" col-lg-4  control-label">Retapez Mot de passe
                             <span style="color:red">*</span>
                         </label> 
                         <div class="col-lg-8">

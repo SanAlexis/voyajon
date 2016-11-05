@@ -4,9 +4,9 @@
 
     <groupId>com.nyx</groupId>
     <artifactId>VOYAJON_S</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1</version>
     <packaging>war</packaging>
-    <name>VOYAJON_S</name>
+    <name>VOYAJON</name>
 
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
@@ -139,14 +139,7 @@
             <artifactId>hibernate-validator</artifactId>
             <version>5.2.2.Final</version>
         </dependency>
-        
-
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-search-orm</artifactId>
-            <version>5.5.0.Final</version>
-        </dependency>
-        
+       
         <dependency>
             <groupId>javax.transaction</groupId>
             <artifactId>jta</artifactId>
@@ -156,13 +149,8 @@
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
             <version>2.4.1</version>
-            <scope>compile</scope>
         </dependency>
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.6</version>
-        </dependency>
+        
         
         <dependency>
             <groupId>com.googlecode.json-simple</groupId>
@@ -190,12 +178,14 @@
             <version>2.7.2</version>
         </dependency>
 
-        
+        <!-- http://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
         <dependency>
             <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.7.12</version>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.21</version>
         </dependency>
+
+       
         
         <dependency>
             <groupId>javax.mail</groupId>

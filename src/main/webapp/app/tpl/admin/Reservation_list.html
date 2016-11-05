@@ -40,7 +40,7 @@
                     <tr>
                         <th st-sort="code">ID</th>
                         <th st-sort="dateReservation">Date Reservation</th>
-                        <th >Statut</th>
+                        <th >Actif</th>
                         <th >Trajet</th>
                         <th >Agence</th>
                         <th >Date Voyage</th>
@@ -118,7 +118,7 @@
                 $scope.voirPassagers = function (idresa) {
                     var modalInstance = $modal.open({
                         templateUrl: 'tpl/admin/Passager_form.html',
-                        controller: 'PassagerForm',
+                        controller: 'PassagerForm1',
                         size: 'lg',
                         resolve: {
                             idresa: function () {
@@ -136,8 +136,8 @@
 
             });
 
-    app.controller("PassagerForm",
-            function PassagerForm($scope, $modalInstance, toaster, ErrorService, CrudService, idresa) {
+    app.controller("PassagerForm1",
+            function PassagerForm1($scope, $modalInstance, toaster, ErrorService, CrudService, idresa) {
 
                 $scope.errorService = ErrorService;
                 $scope.errorService.clear();

@@ -40,7 +40,8 @@ public class SettingController {
     ////CRUD VILLE
     @RequestMapping(value = "/Ville", method = RequestMethod.GET)
     public ResponseEntity<List<Ville>> listVille() {
-        return new ResponseEntity<>(villeRepository.findAll(), HttpStatus.OK);
+        List<Ville> villes=villeRepository.findAll();
+        return new ResponseEntity<>(villes, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/Ville/{id}", method = RequestMethod.GET)

@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean isAdmin(User principal) {
-        return principal.getAuthorities().stream().anyMatch((ga) -> (ga.getAuthority().equalsIgnoreCase(Profil.ADMIN.name())));
+        return principal.getAuthorities().stream().anyMatch((ga) -> (ga.getAuthority().equalsIgnoreCase("ROLE_ADMIN")));
     }
 
    

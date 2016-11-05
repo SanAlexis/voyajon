@@ -28,6 +28,8 @@ import java.util.Set;
 import javax.servlet.http.HttpSession;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -69,9 +71,10 @@ public class ClientController {
 
     @RequestMapping(value = "/Voyage/search", method = RequestMethod.GET)
     public ResponseEntity<JSONObject> searchVoyageClientModel() throws Exception {
+        Sort s=new Sort(Direction.ASC,"libelle");
         JSONObject result = new JSONObject();
-        result.put("trajets", tr.findAll());
-        result.put("compagnies", cr.findAll());
+        result.put("trajets", tr.findAll(s));
+        result.put("compagnies", cr.findAll(s));
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 

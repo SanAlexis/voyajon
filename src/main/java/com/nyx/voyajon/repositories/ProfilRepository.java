@@ -5,21 +5,23 @@
  */
 package com.nyx.voyajon.repositories;
 
-import com.nyx.voyajon.entities.Agence;
+import com.nyx.voyajon.entities.security.Profil;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.security.access.prepost.PostFilter;
 
 /**
  *
  * @author eisti
  */
-public interface AgenceRepository  extends JpaRepository<Agence, Integer>{
+public interface ProfilRepository  extends JpaRepository<Profil, Integer>{
  
-    @PostFilter("filterObject.compagnie.code==principal.profil.code or hasRole('ADMIN') ")
-    @Override
-    public List<Agence> findAll();
     
+    @Override
+    @Query(value = "(select * from Profil)",nativeQuery = true)
+    @PostFilter("filterObject.code==principal.profil.code or hasRole('ADMIN') ")
+    public List<Profil>  findAll();
     
   
 }

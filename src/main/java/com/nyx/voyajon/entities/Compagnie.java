@@ -6,12 +6,13 @@
 package com.nyx.voyajon.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.nyx.voyajon.model.superclass.SimpleAuditEntity;
+import com.nyx.voyajon.entities.security.Profil;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import javax.persistence.PrimaryKeyJoinColumn;
 import org.hibernate.validator.constraints.URL;
 
 /**
@@ -19,9 +20,10 @@ import org.hibernate.validator.constraints.URL;
  * @author eisti
  */
 @Entity
-public class Compagnie  extends SimpleAuditEntity{
+@PrimaryKeyJoinColumn
+public class Compagnie  extends Profil{
     
-    private String libelle;
+    
     @Column
     @URL
     private String siteweb;
@@ -32,15 +34,6 @@ public class Compagnie  extends SimpleAuditEntity{
     @JsonIgnore
     private List<Tarif> tarifs=new ArrayList();
 
-    public String getLibelle() {
-        return libelle;
-    }
-
-    public void setLibelle(String libelle) {
-        this.libelle = libelle;
-    }
-
-   
 
     public String getSiteweb() {
         return siteweb;

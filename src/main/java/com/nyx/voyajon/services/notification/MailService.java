@@ -1,4 +1,4 @@
-package com.nyx.voyajon.services;
+package com.nyx.voyajon.services.notification;
 
 import java.io.IOException;
 import java.util.Map;
@@ -27,12 +27,12 @@ public class MailService {
 	@Autowired
 	private Configuration freemarkerConfiguration;
 	
-	@Async
+	//@Async
 	public void sendEmail(final String from, final String[] to, final String subject, Map<String, Object> model, String template){
 		try {
 			MimeMessage mimeMessage = mailSender.createMimeMessage();
 			MimeMessageHelper message = new MimeMessageHelper(mimeMessage, "UTF-8");
-			message.setFrom(from, "VOYAJON");
+			message.setFrom(from,"VOYAJON");
 			message.setTo(to);
 			message.setSubject(subject);
 			String text;
